@@ -4,36 +4,42 @@
   padding:0;
 }
 
-
 body{
   overflow-x:hidden;
 }
 
 
+/* ================= GENERAL ================= */
+
 
 .dashboard{
+
   display:flex;
   min-height:100vh;
   background:#f5f5f5;
+
 }
 
 
 
-/* ================= SIDEBAR ================= */
+/* ================= SIDEBAR PC ================= */
 
 
 .sidebar{
 
   width:250px;
+
   background:#111;
+
   color:white;
-  display:flex;
-  flex-direction:column;
+
   padding:25px;
 
-  transition:.3s ease;
+  display:flex;
 
-  z-index:1000;
+  flex-direction:column;
+
+  flex-shrink:0;
 
 }
 
@@ -42,6 +48,7 @@ body{
 .logo{
 
   text-align:center;
+
   margin-bottom:40px;
 
 }
@@ -50,15 +57,17 @@ body{
 .logo h2{
 
   color:#c1121f;
+
   font-size:30px;
 
 }
 
 
+
 .logo span{
 
-  color:white;
   font-size:18px;
+
   letter-spacing:4px;
 
 }
@@ -76,9 +85,13 @@ body{
 .sidebar li{
 
   padding:15px;
+
   margin-bottom:10px;
+
   border-radius:10px;
+
   cursor:pointer;
+
   transition:.3s;
 
 }
@@ -101,70 +114,29 @@ body{
 
 
 
-
-
 /* ================= CONTENIDO ================= */
 
 
 .content{
 
   flex:1;
+
   padding:35px;
+
+  min-width:0;
 
 }
 
 
 
-
-
-/* ================= BOTON MENU MOVIL ================= */
+/* ================= MENU MOVIL ================= */
 
 
 .menu-mobile{
 
   display:none;
 
-  position:fixed;
-
-  top:15px;
-  left:15px;
-
-  width:45px;
-  height:45px;
-
-  border:none;
-  border-radius:10px;
-
-  background:#c1121f;
-  color:white;
-
-  font-size:25px;
-
-  z-index:2000;
-
 }
-
-
-
-
-
-.overlay{
-
-  display:none;
-
-}
-
-
-
-
-
-.cerrar-menu{
-
-  display:none;
-
-}
-
-
 
 
 
@@ -174,7 +146,9 @@ body{
 .topbar{
 
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
 
   margin-bottom:30px;
@@ -190,11 +164,11 @@ body{
 }
 
 
-
 .topbar p{
 
-  margin-top:5px;
   color:gray;
+
+  margin-top:5px;
 
 }
 
@@ -202,12 +176,11 @@ body{
 
 .fecha{
 
-  color:#555;
   font-weight:bold;
 
+  color:#555;
+
 }
-
-
 
 
 
@@ -234,9 +207,9 @@ body{
 
   font-size:50px;
 
+  margin-top:10px;
+
 }
-
-
 
 
 
@@ -267,11 +240,9 @@ body{
 
   text-align:center;
 
-  box-shadow:
-  0 2px 10px rgba(0,0,0,.08);
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
 
 }
-
 
 
 .card h4{
@@ -291,8 +262,6 @@ body{
   font-weight:bold;
 
 }
-
-
 
 
 
@@ -335,39 +304,35 @@ body{
 
 .acciones button:nth-child(1){
 
-  background:#0ea5e9;
+ background:#0ea5e9;
 
 }
-
 
 
 .acciones button:nth-child(2){
 
-  background:#ef4444;
+ background:#ef4444;
 
 }
-
 
 
 .acciones button:nth-child(3){
 
-  background:#2563eb;
+ background:#2563eb;
 
 }
-
 
 
 .acciones button:nth-child(4){
 
-  background:#16a34a;
+ background:#16a34a;
 
 }
 
 
-
 .acciones button:nth-child(5){
 
-  background:#9333ea;
+ background:#9333ea;
 
 }
 
@@ -400,6 +365,8 @@ body{
 
   align-items:center;
 
+  margin-bottom:20px;
+
 }
 
 
@@ -425,6 +392,8 @@ body{
   display:flex;
 
   justify-content:space-between;
+
+  align-items:center;
 
   padding:15px 0;
 
@@ -456,21 +425,29 @@ body{
 
 
 
-/* =====================================================
-   TABLET
-===================================================== */
+/* =================================================
+TABLET
+================================================= */
 
 
 @media(max-width:900px){
 
 
+.cards{
+
+ flex-direction:column;
+
+}
+
+
 .acciones{
 
-  grid-template-columns:repeat(2,1fr);
+ grid-template-columns:repeat(2,1fr);
 
 }
 
 
+
 }
 
 
@@ -478,19 +455,54 @@ body{
 
 
 
-
-/* =====================================================
-   CELULAR
-===================================================== */
+/* =================================================
+CELULAR
+================================================= */
 
 
 @media(max-width:768px){
 
 
+.dashboard{
+
+ display:block;
+
+}
+
+
+
+/* BOTON MENU */
+
 
 .menu-mobile{
 
-  display:block;
+ display:flex;
+
+ position:fixed;
+
+ top:15px;
+
+ left:15px;
+
+ width:45px;
+
+ height:45px;
+
+ align-items:center;
+
+ justify-content:center;
+
+ background:#c1121f;
+
+ color:white;
+
+ border:none;
+
+ border-radius:10px;
+
+ font-size:25px;
+
+ z-index:3000;
 
 }
 
@@ -498,32 +510,24 @@ body{
 
 
 
-.dashboard{
-
-  display:block;
-
-}
-
-
-
-
-
-/* MENU LATERAL */
+/* SIDEBAR OCULTO */
 
 
 .sidebar{
 
+ position:fixed;
 
-  position:fixed;
+ top:0;
 
-  left:-280px;
+ left:-270px;
 
-  top:0;
+ width:270px;
 
-  height:100vh;
+ height:100vh;
 
-  width:270px;
+ z-index:2000;
 
+ transition:.3s;
 
 }
 
@@ -531,73 +535,38 @@ body{
 
 .sidebar.activo-menu{
 
-
-  left:0;
-
-}
-
-
-
-
-
-.cerrar-menu{
-
-
-  display:flex;
-
-  justify-content:flex-end;
-
-}
-
-
-
-.cerrar-menu button{
-
-
-  background:none;
-
-  border:none;
-
-  color:white;
-
-  font-size:25px;
-
+ left:0;
 
 }
 
 
 
 
+
+/* OSCURO */
 
 .overlay{
 
+ position:fixed;
 
-  display:block;
+ inset:0;
 
-  position:fixed;
+ background:rgba(0,0,0,.5);
 
-  inset:0;
-
-  background:rgba(0,0,0,.6);
-
-  z-index:900;
+ z-index:1500;
 
 }
 
 
 
 
-
-/* CONTENIDO */
 
 
 .content{
 
+ width:100%;
 
-  width:100%;
-
-  padding:70px 15px 20px;
-
+ padding:75px 15px 20px;
 
 }
 
@@ -607,10 +576,11 @@ body{
 
 .topbar{
 
+ flex-direction:column;
 
-  flex-direction:column;
+ align-items:flex-start;
 
-  align-items:flex-start;
+ gap:10px;
 
 }
 
@@ -618,17 +588,7 @@ body{
 
 .topbar h1{
 
-  font-size:26px;
-
-}
-
-
-
-
-
-.fecha{
-
-  font-size:13px;
+ font-size:25px;
 
 }
 
@@ -638,7 +598,7 @@ body{
 
 .total-card{
 
-  padding:20px;
+ padding:20px;
 
 }
 
@@ -646,8 +606,9 @@ body{
 
 .total-card h1{
 
+ font-size:32px;
 
-  font-size:32px;
+ word-break:break-word;
 
 }
 
@@ -655,12 +616,15 @@ body{
 
 
 
+
+
 .cards{
 
+ display:grid;
 
-  display:grid;
+ grid-template-columns:1fr;
 
-  grid-template-columns:1fr;
+ gap:15px;
 
 }
 
@@ -670,9 +634,10 @@ body{
 
 .card span{
 
-  font-size:28px;
+ font-size:28px;
 
 }
+
 
 
 
@@ -680,8 +645,9 @@ body{
 
 .acciones{
 
+ grid-template-columns:1fr;
 
-  grid-template-columns:1fr;
+ gap:15px;
 
 }
 
@@ -689,13 +655,13 @@ body{
 
 .acciones button{
 
+ height:65px;
 
-  height:65px;
-
-  font-size:15px;
-
+ font-size:15px;
 
 }
+
+
 
 
 
@@ -703,32 +669,29 @@ body{
 
 .ultimas{
 
-
-  padding:15px;
+ padding:15px;
 
 }
+
 
 
 
 
 .titulo-ultimas{
 
+ flex-direction:column;
 
-  flex-direction:column;
+ align-items:flex-start;
 
-  align-items:flex-start;
-
-  gap:15px;
+ gap:15px;
 
 }
 
 
 
-
 .btn-ver-todas{
 
-
-  width:100%;
+ width:100%;
 
 }
 
@@ -738,18 +701,20 @@ body{
 
 .factura{
 
+ flex-direction:column;
 
-  flex-direction:column;
+ align-items:flex-start;
 
-  gap:10px;
+ gap:10px;
 
 }
 
 
 
+
 .valor-dashboard{
 
-  font-size:18px;
+ font-size:18px;
 
 }
 

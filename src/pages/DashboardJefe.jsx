@@ -1,58 +1,38 @@
-import { 
-  useEffect, 
-  useState 
-} from "react";
-
-import {
-  useNavigate
-} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import api from "../api/axios";
-
-import "./../styles/dashboard.css";
-
+import "../styles/dashboard.css";
 
 
-function DashboardJefe(){
+function DashboardJefe() {
 
 
   const navigate = useNavigate();
 
 
-
-  const [menuAbierto,setMenuAbierto] = useState(false);
-
+  const [menu, setMenu] = useState(false);
 
 
-  const hoy = new Date().toLocaleDateString(
-    "es-CO",
-    {
-      weekday:"long",
-      day:"numeric",
-      month:"long",
-      year:"numeric"
-    }
-  );
 
-
+  const hoy = new Date().toLocaleDateString("es-CO", {
+    weekday:"long",
+    day:"numeric",
+    month:"long",
+    year:"numeric",
+  });
 
 
 
   const [datos,setDatos] = useState({
 
     totalVentas:0,
-
     totalClientes:0,
-
     totalTrabajadores:0,
-
     totalFacturas:0,
-
     ultimasFacturas:[]
 
   });
-
-
 
 
 
@@ -67,24 +47,19 @@ function DashboardJefe(){
       try{
 
 
-        const respuesta = await api.get(
-          "/dashboard"
-        );
+        const respuesta = await api.get("/dashboard");
 
 
-        setDatos(
-          respuesta.data
-        );
+        setDatos(respuesta.data);
+
 
 
       }catch(error){
-
 
         console.error(
           "Error cargando dashboard:",
           error
         );
-
 
       }
 
@@ -104,19 +79,13 @@ function DashboardJefe(){
 
 
 
-
-
   const cerrarSesion = ()=>{
 
 
     localStorage.removeItem("usuario");
-
     localStorage.removeItem("usuario_id");
-
     localStorage.removeItem("usuario_nombre");
-
     localStorage.removeItem("usuario_rol");
-
     localStorage.removeItem("sesion");
 
 
@@ -129,9 +98,26 @@ function DashboardJefe(){
 
 
 
+  return (
 
 
-  return(
+    <>
+
+
+    {/* BOTON MENU CELULAR */}
+
+
+    <button
+      className="menu-mobile"
+      onClick={()=>setMenu(true)}
+    >
+
+      ☰
+
+    </button>
+
+
+
 
 
     <div className="dashboard">
@@ -140,47 +126,16 @@ function DashboardJefe(){
 
 
 
-      {/* BOTON MENU CELULAR */}
-
-
-      <button
-
-        className="menu-mobile"
-
-        onClick={()=>setMenuAbierto(true)}
-
-      >
-
-        ☰
-
-      </button>
-
-
-
-
-
-
-
-
-      {/* FONDO OSCURO CUANDO MENU ABIERTO */}
-
-
       {
-        menuAbierto && (
+        menu && (
 
           <div
-
             className="overlay"
-
-            onClick={()=>setMenuAbierto(false)}
-
-          >
-
-          </div>
+            onClick={()=>setMenu(false)}
+          ></div>
 
         )
       }
-
 
 
 
@@ -193,17 +148,14 @@ function DashboardJefe(){
 
 
       <aside
-
         className={
-          menuAbierto
+          menu
           ?
           "sidebar activo-menu"
           :
           "sidebar"
         }
-
       >
-
 
 
 
@@ -211,9 +163,7 @@ function DashboardJefe(){
 
 
           <button
-
-            onClick={()=>setMenuAbierto(false)}
-
+            onClick={()=>setMenu(false)}
           >
 
             ✖
@@ -227,21 +177,16 @@ function DashboardJefe(){
 
 
 
-
         <div className="logo">
 
 
           <h2>
-
             CONTROL
-
           </h2>
 
 
           <span>
-
             CUENTAS
-
           </span>
 
 
@@ -260,38 +205,15 @@ function DashboardJefe(){
 
 
 
-            <li
-
-              className="active"
-
-              onClick={()=>{
-
-                navigate("/dashboard");
-
-                setMenuAbierto(false);
-
-              }}
-
-            >
-
+            <li className="active">
               🏠 Inicio
-
             </li>
 
 
 
 
-
             <li
-
-              onClick={()=>{
-
-                navigate("/tiendas");
-
-                setMenuAbierto(false);
-
-              }}
-
+              onClick={()=>navigate("/tiendas")}
             >
 
               🏪 Tiendas
@@ -303,15 +225,7 @@ function DashboardJefe(){
 
 
             <li
-
-              onClick={()=>{
-
-                navigate("/facturas");
-
-                setMenuAbierto(false);
-
-              }}
-
+              onClick={()=>navigate("/facturas")}
             >
 
               🧾 Facturas
@@ -323,15 +237,7 @@ function DashboardJefe(){
 
 
             <li
-
-              onClick={()=>{
-
-                navigate("/trabajadores");
-
-                setMenuAbierto(false);
-
-              }}
-
+              onClick={()=>navigate("/trabajadores")}
             >
 
               👷 Trabajadores
@@ -342,10 +248,9 @@ function DashboardJefe(){
 
 
 
+
             <li
-
               onClick={cerrarSesion}
-
             >
 
               🚪 Cerrar sesión
@@ -354,14 +259,10 @@ function DashboardJefe(){
 
 
 
-
-
           </ul>
 
 
-
         </nav>
-
 
 
 
@@ -373,7 +274,9 @@ function DashboardJefe(){
 
 
 
-      {/* CONTENIDO PRINCIPAL */}
+
+
+      {/* CONTENIDO */}
 
 
 
@@ -386,14 +289,11 @@ function DashboardJefe(){
         <div className="topbar">
 
 
-
           <div>
 
 
             <h1>
-
               Inicio
-
             </h1>
 
 
@@ -401,13 +301,11 @@ function DashboardJefe(){
             <p>
 
               Bienvenido{" "}
-
               {
-                JSON.parse(
-                  localStorage.getItem("usuario")
-                )?.nombre
+              JSON.parse(
+                localStorage.getItem("usuario")
+              )?.nombre
               }
-
 
             </p>
 
@@ -418,15 +316,12 @@ function DashboardJefe(){
 
 
 
-          <div className="fecha">
 
+          <div className="fecha">
 
             {hoy}
 
-
           </div>
-
-
 
 
 
@@ -437,33 +332,32 @@ function DashboardJefe(){
 
 
 
+
+
+
+        {/* TOTAL */}
+
+
+
         <div className="total-card">
 
 
           <h3>
-
             💰 Total vendido hoy
-
           </h3>
-
 
 
 
           <h1>
 
-
             $
 
             {
-              Number(
-                datos.totalVentas
-              )
+              Number(datos.totalVentas)
               .toLocaleString("es-CO")
             }
 
-
           </h1>
-
 
 
 
@@ -474,13 +368,18 @@ function DashboardJefe(){
           </p>
 
 
-
         </div>
-        
 
 
 
-        {/* CREAR NUEVOS */}
+
+
+
+
+
+
+        {/* CREAR */}
+
 
 
         <div className="acciones">
@@ -488,9 +387,7 @@ function DashboardJefe(){
 
 
           <button
-
             onClick={()=>navigate("/nueva-tienda")}
-
           >
 
             🏪 Nueva Tienda
@@ -502,9 +399,7 @@ function DashboardJefe(){
 
 
           <button
-
             onClick={()=>navigate("/nueva-factura")}
-
           >
 
             🧾 Nueva Factura
@@ -523,7 +418,7 @@ function DashboardJefe(){
 
 
 
-        {/* TARJETAS RESUMEN */}
+        {/* RESUMEN */}
 
 
 
@@ -537,16 +432,12 @@ function DashboardJefe(){
 
 
             <h4>
-
               🧾 Facturas Hoy
-
             </h4>
 
 
             <span>
-
               {datos.totalFacturas}
-
             </span>
 
 
@@ -562,16 +453,12 @@ function DashboardJefe(){
 
 
             <h4>
-
               🏪 Tiendas
-
             </h4>
 
 
             <span>
-
               {datos.totalClientes}
-
             </span>
 
 
@@ -587,21 +474,16 @@ function DashboardJefe(){
 
 
             <h4>
-
               👷 Trabajadores
-
             </h4>
 
 
             <span>
-
               {datos.totalTrabajadores}
-
             </span>
 
 
           </div>
-
 
 
 
@@ -616,7 +498,7 @@ function DashboardJefe(){
 
 
 
-        {/* ACCESOS RAPIDOS */}
+        {/* ACCESOS */}
 
 
 
@@ -624,12 +506,8 @@ function DashboardJefe(){
 
 
 
-
-
           <button
-
             onClick={()=>navigate("/facturas")}
-
           >
 
             🧾 Ver Facturas
@@ -640,12 +518,8 @@ function DashboardJefe(){
 
 
 
-
-
           <button
-
             onClick={()=>navigate("/tiendas")}
-
           >
 
             🏪 Ver Tiendas
@@ -656,20 +530,13 @@ function DashboardJefe(){
 
 
 
-
-
           <button
-
             onClick={()=>navigate("/trabajadores")}
-
           >
 
             👷 Trabajadores
 
           </button>
-
-
-
 
 
 
@@ -698,9 +565,7 @@ function DashboardJefe(){
 
 
             <h2>
-
               Últimas facturas
-
             </h2>
 
 
@@ -730,161 +595,77 @@ function DashboardJefe(){
 
 
 
-
           {
+            datos.ultimasFacturas.length===0
 
-            datos.ultimasFacturas.length === 0 ? (
+            ?
 
-
-
+            (
 
               <div className="sinDatos">
 
-
                 No hay facturas registradas.
-
 
               </div>
 
+            )
 
 
+            :
 
 
-            ) : (
+            datos.ultimasFacturas.map((factura)=>(
 
 
+              <div
 
+                className="factura"
 
-              datos.ultimasFacturas.map((factura)=>(
+                key={factura.id}
 
+              >
 
 
 
-                <div
+                <div>
 
-                  className="factura"
 
-                  key={factura.id}
+                  <strong>
 
-                >
-
-
-
-
-
-                  <div>
-
-
-
-
-                    <strong>
-
-
-                      Factura #
-
-                      {
-                        String(factura.id)
-                        .substring(0,8)
-                      }
-
-
-
-                    </strong>
-
-
-
-
-
-
-                    <p>
-
-
-                      Cliente:
-
-                      {" "}
-
-                      {
-                        factura.clientes?.nombre ||
-
-                        "Sin cliente"
-                      }
-
-
-
-                    </p>
-
-
-
-
-
-
-                    <p>
-
-
-                      📅 {factura.fecha}
-
-
-
-                    </p>
-
-
-
-
-
-
-
-                    <p>
-
-
-                      🕒 
-
-                      {
-                        factura.hora?.substring(0,5)
-                      }
-
-
-
-                    </p>
-
-
-
-
-
-
-                  </div>
-
-
-
-
-
-
-
-
-
-                  <strong
-
-                    className="valor-dashboard"
-
-                  >
-
-
-
-                    $
-
+                    Factura #
                     {
-                      Number(
-                        factura.valor
-                      )
-                      .toLocaleString("es-CO")
+                    String(factura.id)
+                    .substring(0,8)
                     }
-
-
-
 
                   </strong>
 
 
 
+                  <p>
+
+                    Cliente:
+                    {" "}
+                    {
+                    factura.clientes?.nombre
+                    ||
+                    "Sin cliente"
+                    }
+
+                  </p>
+
+
+
+
+                  <p>
+                    📅 {factura.fecha}
+                  </p>
+
+
+
+                  <p>
+                    🕒 {factura.hora?.substring(0,5)}
+                  </p>
 
 
 
@@ -894,16 +675,33 @@ function DashboardJefe(){
 
 
 
-              ))
+
+
+                <strong className="valor-dashboard">
+
+
+                  $
+
+                  {
+                  Number(factura.valor)
+                  .toLocaleString("es-CO")
+                  }
+
+
+                </strong>
 
 
 
 
 
-            )
+              </div>
 
+
+
+            ))
 
           }
+
 
 
 
@@ -922,16 +720,17 @@ function DashboardJefe(){
 
 
 
+
     </div>
 
+
+    </>
 
 
   );
 
 
 }
-
-
 
 
 

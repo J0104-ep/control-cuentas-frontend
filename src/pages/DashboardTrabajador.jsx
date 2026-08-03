@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import api from "../api/axios";
-import "./../styles/dashboard.css";
+import "../styles/dashboard.css";
 
 
 function DashboardTrabajador() {
@@ -11,11 +11,15 @@ function DashboardTrabajador() {
   const navigate = useNavigate();
 
 
+  const [menu,setMenu] = useState(false);
+
+
+
   const hoy = new Date().toLocaleDateString("es-CO", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
+    weekday:"long",
+    day:"numeric",
+    month:"long",
+    year:"numeric",
   });
 
 
@@ -23,6 +27,7 @@ function DashboardTrabajador() {
   const usuario = JSON.parse(
     localStorage.getItem("usuario")
   );
+
 
 
 
@@ -99,7 +104,49 @@ function DashboardTrabajador() {
 
 
 
+
+  const cerrarSesion = ()=>{
+
+
+    localStorage.removeItem("usuario");
+    localStorage.removeItem("usuario_id");
+    localStorage.removeItem("usuario_nombre");
+    localStorage.removeItem("usuario_rol");
+    localStorage.removeItem("sesion");
+
+
+    navigate("/login");
+
+
+  };
+
+
+
+
+
+
+
 return(
+
+
+<>
+
+
+<button
+
+className="menu-mobile"
+
+onClick={()=>setMenu(true)}
+
+>
+
+☰
+
+</button>
+
+
+
+
 
 
 <div className="dashboard">
@@ -109,7 +156,63 @@ return(
 
 
 
-<aside className="sidebar">
+{
+menu && (
+
+<div
+
+className="overlay"
+
+onClick={()=>setMenu(false)}
+
+></div>
+
+)
+
+}
+
+
+
+
+
+
+
+<aside
+
+className={
+menu
+?
+"sidebar activo-menu"
+:
+"sidebar"
+}
+
+>
+
+
+
+
+
+<div className="cerrar-menu">
+
+
+<button
+
+onClick={()=>setMenu(false)}
+
+>
+
+✖
+
+</button>
+
+
+</div>
+
+
+
+
+
 
 
 
@@ -117,12 +220,16 @@ return(
 
 
 <h2>
+
 CONTROL
+
 </h2>
 
 
 <span>
+
 CUENTAS
+
 </span>
 
 
@@ -133,9 +240,13 @@ CUENTAS
 
 
 
+
 <nav>
 
+
 <ul>
+
+
 
 
 <li className="active">
@@ -148,10 +259,11 @@ CUENTAS
 
 
 
+
 <li
-onClick={()=>
-navigate("/facturas")
-}
+
+onClick={()=>navigate("/facturas")}
+
 >
 
 🧾 Mis Facturas
@@ -162,10 +274,12 @@ navigate("/facturas")
 
 
 
+
+
 <li
-onClick={()=>
-navigate("/nueva-factura")
-}
+
+onClick={()=>navigate("/nueva-factura")}
+
 >
 
 ➕ Nueva Factura
@@ -174,23 +288,22 @@ navigate("/nueva-factura")
 
 
 
+
+
+
+
+
 <li
-onClick={() => {
 
-localStorage.removeItem("usuario");
-localStorage.removeItem("usuario_id");
-localStorage.removeItem("usuario_nombre");
-localStorage.removeItem("usuario_rol");
-localStorage.removeItem("sesion");
+onClick={cerrarSesion}
 
-navigate("/login");
-
-}}
 >
 
 🚪 Cerrar sesión
 
 </li>
+
+
 
 
 
@@ -201,7 +314,14 @@ navigate("/login");
 </nav>
 
 
+
+
+
 </aside>
+
+
+
+
 
 
 
@@ -218,7 +338,9 @@ navigate("/login");
 
 
 
+
 <div className="topbar">
+
 
 
 <div>
@@ -231,16 +353,21 @@ Inicio
 </h1>
 
 
-<p>
+
 
 <p>
-Bienvenido {JSON.parse(localStorage.getItem("usuario"))?.nombre}
-</p>
+
+Bienvenido{" "}
+
+{usuario?.nombre}
 
 </p>
+
 
 
 </div>
+
+
 
 
 
@@ -252,7 +379,12 @@ Bienvenido {JSON.parse(localStorage.getItem("usuario"))?.nombre}
 </div>
 
 
+
+
 </div>
+
+
+
 
 
 
@@ -265,6 +397,7 @@ Bienvenido {JSON.parse(localStorage.getItem("usuario"))?.nombre}
 <div className="total-card">
 
 
+
 <h3>
 
 💰 Mis ventas de hoy
@@ -273,7 +406,10 @@ Bienvenido {JSON.parse(localStorage.getItem("usuario"))?.nombre}
 
 
 
+
+
 <h1>
+
 
 $
 
@@ -287,11 +423,16 @@ Number(datos.totalVentas)
 
 
 
+
+
+
 <p>
 
 Ventas realizadas durante la jornada.
 
 </p>
+
+
 
 
 </div>
@@ -304,7 +445,11 @@ Ventas realizadas durante la jornada.
 
 
 
+
+
+
 <div className="acciones">
+
 
 
 <button
@@ -320,7 +465,12 @@ navigate("/nueva-factura")
 </button>
 
 
+
 </div>
+
+
+
+
 
 
 
@@ -334,6 +484,8 @@ navigate("/nueva-factura")
 
 
 
+
+
 <div className="card">
 
 
@@ -344,6 +496,7 @@ navigate("/nueva-factura")
 </h4>
 
 
+
 <span>
 
 {datos.totalFacturas}
@@ -351,7 +504,9 @@ navigate("/nueva-factura")
 </span>
 
 
+
 </div>
+
 
 
 
@@ -369,7 +524,9 @@ navigate("/nueva-factura")
 </h4>
 
 
+
 <span>
+
 
 $
 
@@ -379,15 +536,23 @@ Number(datos.saldoPendiente || 0)
 }
 
 
+
 </span>
 
 
+
+</div>
+
+
+
+
+
 </div>
 
 
 
 
-</div>
+
 
 
 
@@ -401,7 +566,10 @@ Number(datos.saldoPendiente || 0)
 
 
 
+
+
 <div className="titulo-ultimas">
+
 
 
 <h2>
@@ -409,6 +577,9 @@ Number(datos.saldoPendiente || 0)
 Mis últimas facturas
 
 </h2>
+
+
+
 
 
 
@@ -438,9 +609,16 @@ Ver todas →
 
 
 
+
+
+
 {
 
-datos.ultimasFacturas.length===0 ? (
+datos.ultimasFacturas.length===0
+
+?
+
+(
 
 
 <div className="sinDatos">
@@ -450,11 +628,17 @@ No hay facturas registradas.
 </div>
 
 
-):(
+)
+
+
+:
+
+(
 
 
 
 datos.ultimasFacturas.map((factura)=>(
+
 
 
 <div
@@ -467,19 +651,27 @@ key={factura.id}
 
 
 
+
 <div>
+
+
+
 
 
 <strong>
 
 Factura #
+
 {
 String(factura.id)
 .substring(0,8)
 
 }
 
+
 </strong>
+
+
 
 
 
@@ -492,12 +684,17 @@ Cliente:
 {" "}
 
 {
+
 factura.clientes?.nombre ||
+
 "Sin cliente"
 
 }
 
+
 </p>
+
+
 
 
 
@@ -510,13 +707,20 @@ factura.clientes?.nombre ||
 {" "}
 
 {
+
 factura.usuarios?.nombre ||
+
 usuario?.nombre ||
+
 "Usuario"
 
 }
 
+
 </p>
+
+
+
 
 
 
@@ -532,11 +736,16 @@ usuario?.nombre ||
 
 
 
+
+
 <p>
 
 🕒 {factura.hora?.substring(0,5)}
 
 </p>
+
+
+
 
 
 </div>
@@ -547,12 +756,19 @@ usuario?.nombre ||
 
 
 
-<strong className="valor-dashboard">
+
+
+<strong
+
+className="valor-dashboard"
+
+>
 
 
 $
 
 {
+
 Number(factura.valor)
 .toLocaleString("es-CO")
 
@@ -565,13 +781,18 @@ Number(factura.valor)
 
 
 
+
+
 </div>
+
 
 
 ))
 
 
 )
+
+
 
 }
 
@@ -588,7 +809,12 @@ Number(factura.valor)
 
 
 
+
 </main>
+
+
+
+
 
 
 
@@ -597,7 +823,11 @@ Number(factura.valor)
 
 
 
+</>
+
+
 );
+
 
 
 }
