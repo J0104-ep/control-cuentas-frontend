@@ -1,10 +1,11 @@
 import axios from "axios";
 
+
 const api = axios.create({
-  baseURL: "http://localhost:5000",
-  headers: {
-    "Content-Type": "application/json",
-  },
+
+    baseURL:"https://control-cuentas-api.onrender.com"
+
 });
+
 
 export default api;
