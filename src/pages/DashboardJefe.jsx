@@ -1,126 +1,351 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { 
+  useEffect, 
+  useState 
+} from "react";
+
+import {
+  useNavigate
+} from "react-router-dom";
 
 import api from "../api/axios";
+
 import "./../styles/dashboard.css";
 
 
-function DashboardJefe() {
+
+function DashboardJefe(){
+
 
   const navigate = useNavigate();
 
 
-  const hoy = new Date().toLocaleDateString("es-CO", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
+
+  const [menuAbierto,setMenuAbierto] = useState(false);
+
+
+
+  const hoy = new Date().toLocaleDateString(
+    "es-CO",
+    {
+      weekday:"long",
+      day:"numeric",
+      month:"long",
+      year:"numeric"
+    }
+  );
+
+
+
+
+
+  const [datos,setDatos] = useState({
+
+    totalVentas:0,
+
+    totalClientes:0,
+
+    totalTrabajadores:0,
+
+    totalFacturas:0,
+
+    ultimasFacturas:[]
+
   });
 
 
 
-  const [datos, setDatos] = useState({
-
-    totalVentas: 0,
-    totalClientes: 0,
-    totalTrabajadores: 0,
-    totalFacturas: 0,
-    ultimasFacturas: []
-
-  });
 
 
 
-  useEffect(() => {
+
+  useEffect(()=>{
 
 
-    const cargarDashboard = async () => {
-
-      try {
-
-        const respuesta = await api.get("/dashboard");
-
-        setDatos(respuesta.data);
+    const cargarDashboard = async()=>{
 
 
-      } catch (error) {
+      try{
+
+
+        const respuesta = await api.get(
+          "/dashboard"
+        );
+
+
+        setDatos(
+          respuesta.data
+        );
+
+
+      }catch(error){
+
 
         console.error(
           "Error cargando dashboard:",
           error
         );
 
+
       }
 
+
     };
+
 
 
     cargarDashboard();
 
 
-  }, []);
+
+  },[]);
 
 
 
 
 
-  return (
+
+
+
+  const cerrarSesion = ()=>{
+
+
+    localStorage.removeItem("usuario");
+
+    localStorage.removeItem("usuario_id");
+
+    localStorage.removeItem("usuario_nombre");
+
+    localStorage.removeItem("usuario_rol");
+
+    localStorage.removeItem("sesion");
+
+
+    navigate("/login");
+
+
+  };
+
+
+
+
+
+
+
+  return(
+
 
     <div className="dashboard">
 
 
-      <aside className="sidebar">
 
 
-        <div className="logo">
 
-          <h2>
-            CONTROL
-          </h2>
+      {/* BOTON MENU CELULAR */}
 
-          <span>
-            CUENTAS
-          </span>
+
+      <button
+
+        className="menu-mobile"
+
+        onClick={()=>setMenuAbierto(true)}
+
+      >
+
+        ☰
+
+      </button>
+
+
+
+
+
+
+
+
+      {/* FONDO OSCURO CUANDO MENU ABIERTO */}
+
+
+      {
+        menuAbierto && (
+
+          <div
+
+            className="overlay"
+
+            onClick={()=>setMenuAbierto(false)}
+
+          >
+
+          </div>
+
+        )
+      }
+
+
+
+
+
+
+
+
+      {/* SIDEBAR */}
+
+
+
+      <aside
+
+        className={
+          menuAbierto
+          ?
+          "sidebar activo-menu"
+          :
+          "sidebar"
+        }
+
+      >
+
+
+
+
+        <div className="cerrar-menu">
+
+
+          <button
+
+            onClick={()=>setMenuAbierto(false)}
+
+          >
+
+            ✖
+
+          </button>
+
 
         </div>
 
 
 
+
+
+
+        <div className="logo">
+
+
+          <h2>
+
+            CONTROL
+
+          </h2>
+
+
+          <span>
+
+            CUENTAS
+
+          </span>
+
+
+        </div>
+
+
+
+
+
+
+
         <nav>
+
 
           <ul>
 
-            <li className="active">
-              🏠 Inicio
-            </li>
 
-
-            <li onClick={() => navigate("/tiendas")}>
-              🏪 Tiendas
-            </li>
-
-
-            <li onClick={() => navigate("/facturas")}>
-              🧾 Facturas
-            </li>
-
-
-            <li onClick={() => navigate("/trabajadores")}>
-              👷 Trabajadores
-            </li>
 
             <li
-            onClick={() => {
 
-            localStorage.removeItem("usuario");
-            localStorage.removeItem("usuario_id");
-            localStorage.removeItem("usuario_nombre");
-            localStorage.removeItem("usuario_rol");
-            localStorage.removeItem("sesion");
+              className="active"
 
-            navigate("/login");
+              onClick={()=>{
 
-            }}
+                navigate("/dashboard");
+
+                setMenuAbierto(false);
+
+              }}
+
+            >
+
+              🏠 Inicio
+
+            </li>
+
+
+
+
+
+            <li
+
+              onClick={()=>{
+
+                navigate("/tiendas");
+
+                setMenuAbierto(false);
+
+              }}
+
+            >
+
+              🏪 Tiendas
+
+            </li>
+
+
+
+
+
+            <li
+
+              onClick={()=>{
+
+                navigate("/facturas");
+
+                setMenuAbierto(false);
+
+              }}
+
+            >
+
+              🧾 Facturas
+
+            </li>
+
+
+
+
+
+            <li
+
+              onClick={()=>{
+
+                navigate("/trabajadores");
+
+                setMenuAbierto(false);
+
+              }}
+
+            >
+
+              👷 Trabajadores
+
+            </li>
+
+
+
+
+
+            <li
+
+              onClick={cerrarSesion}
+
             >
 
               🚪 Cerrar sesión
@@ -128,9 +353,16 @@ function DashboardJefe() {
             </li>
 
 
+
+
+
           </ul>
 
+
+
         </nav>
+
+
 
 
       </aside>
@@ -139,22 +371,44 @@ function DashboardJefe() {
 
 
 
+
+
+      {/* CONTENIDO PRINCIPAL */}
+
+
+
       <main className="content">
+
+
 
 
 
         <div className="topbar">
 
 
+
           <div>
 
+
             <h1>
+
               Inicio
+
             </h1>
 
 
+
             <p>
-            Bienvenido {JSON.parse(localStorage.getItem("usuario"))?.nombre}
+
+              Bienvenido{" "}
+
+              {
+                JSON.parse(
+                  localStorage.getItem("usuario")
+                )?.nombre
+              }
+
+
             </p>
 
 
@@ -162,14 +416,22 @@ function DashboardJefe() {
 
 
 
+
+
           <div className="fecha">
 
+
             {hoy}
+
 
           </div>
 
 
+
+
+
         </div>
+
 
 
 
@@ -179,28 +441,42 @@ function DashboardJefe() {
 
 
           <h3>
+
             💰 Total vendido hoy
+
           </h3>
+
+
 
 
           <h1>
 
+
             $
-            {Number(datos.totalVentas)
-              .toLocaleString("es-CO")}
+
+            {
+              Number(
+                datos.totalVentas
+              )
+              .toLocaleString("es-CO")
+            }
+
 
           </h1>
 
 
+
+
           <p>
+
             Ventas registradas durante el día.
+
           </p>
 
 
+
         </div>
-
-
-
+        
 
 
 
@@ -210,10 +486,11 @@ function DashboardJefe() {
         <div className="acciones">
 
 
+
           <button
-            onClick={() =>
-              navigate("/nueva-tienda")
-            }
+
+            onClick={()=>navigate("/nueva-tienda")}
+
           >
 
             🏪 Nueva Tienda
@@ -222,10 +499,12 @@ function DashboardJefe() {
 
 
 
+
+
           <button
-            onClick={() =>
-              navigate("/nueva-factura")
-            }
+
+            onClick={()=>navigate("/nueva-factura")}
+
           >
 
             🧾 Nueva Factura
@@ -233,7 +512,10 @@ function DashboardJefe() {
           </button>
 
 
+
         </div>
+
+
 
 
 
@@ -244,20 +526,27 @@ function DashboardJefe() {
         {/* TARJETAS RESUMEN */}
 
 
+
         <div className="cards">
 
 
 
+
+
           <div className="card">
 
 
             <h4>
+
               🧾 Facturas Hoy
+
             </h4>
 
 
             <span>
+
               {datos.totalFacturas}
+
             </span>
 
 
@@ -267,20 +556,28 @@ function DashboardJefe() {
 
 
 
+
+
           <div className="card">
 
 
             <h4>
+
               🏪 Tiendas
+
             </h4>
 
 
             <span>
+
               {datos.totalClientes}
+
             </span>
 
 
           </div>
+
+
 
 
 
@@ -290,16 +587,22 @@ function DashboardJefe() {
 
 
             <h4>
+
               👷 Trabajadores
+
             </h4>
 
 
             <span>
+
               {datos.totalTrabajadores}
+
             </span>
 
 
           </div>
+
+
 
 
 
@@ -312,16 +615,21 @@ function DashboardJefe() {
 
 
 
-        {/* BOTONES DE ACCESO */}
+
+        {/* ACCESOS RAPIDOS */}
+
 
 
         <div className="acciones">
 
 
+
+
+
           <button
-            onClick={() =>
-              navigate("/facturas")
-            }
+
+            onClick={()=>navigate("/facturas")}
+
           >
 
             🧾 Ver Facturas
@@ -330,10 +638,14 @@ function DashboardJefe() {
 
 
 
+
+
+
+
           <button
-            onClick={() =>
-              navigate("/tiendas")
-            }
+
+            onClick={()=>navigate("/tiendas")}
+
           >
 
             🏪 Ver Tiendas
@@ -343,15 +655,21 @@ function DashboardJefe() {
 
 
 
+
+
+
           <button
-            onClick={() =>
-              navigate("/trabajadores")
-            }
+
+            onClick={()=>navigate("/trabajadores")}
+
           >
 
             👷 Trabajadores
 
           </button>
+
+
+
 
 
 
@@ -368,16 +686,24 @@ function DashboardJefe() {
         {/* ULTIMAS FACTURAS */}
 
 
+
         <div className="ultimas">
+
+
 
 
 
           <div className="titulo-ultimas">
 
 
+
             <h2>
+
               Últimas facturas
+
             </h2>
+
+
 
 
 
@@ -385,9 +711,7 @@ function DashboardJefe() {
 
               className="btn-ver-todas"
 
-              onClick={() =>
-                navigate("/facturas")
-              }
+              onClick={()=>navigate("/facturas")}
 
             >
 
@@ -396,27 +720,44 @@ function DashboardJefe() {
             </button>
 
 
+
           </div>
 
 
 
 
 
+
+
+
+
           {
+
             datos.ultimasFacturas.length === 0 ? (
+
+
 
 
               <div className="sinDatos">
 
+
                 No hay facturas registradas.
 
+
               </div>
+
+
+
 
 
             ) : (
 
 
+
+
               datos.ultimasFacturas.map((factura)=>(
+
+
 
 
                 <div
@@ -428,39 +769,85 @@ function DashboardJefe() {
                 >
 
 
+
+
+
                   <div>
+
+
 
 
                     <strong>
 
+
                       Factura #
-                      {String(factura.id)
-                      .substring(0,8)}
+
+                      {
+                        String(factura.id)
+                        .substring(0,8)
+                      }
+
+
 
                     </strong>
 
 
 
+
+
+
                     <p>
+
 
                       Cliente:
+
                       {" "}
-                      {factura.clientes?.nombre ||
-                      "Sin cliente"}
+
+                      {
+                        factura.clientes?.nombre ||
+
+                        "Sin cliente"
+                      }
+
+
 
                     </p>
 
 
 
+
+
+
                     <p>
+
+
                       📅 {factura.fecha}
+
+
+
                     </p>
+
+
+
+
 
 
 
                     <p>
-                      🕒 {factura.hora?.substring(0,5)}
+
+
+                      🕒 
+
+                      {
+                        factura.hora?.substring(0,5)
+                      }
+
+
+
                     </p>
+
+
+
 
 
 
@@ -470,25 +857,54 @@ function DashboardJefe() {
 
 
 
-                  <strong className="valor-dashboard">
+
+
+
+
+                  <strong
+
+                    className="valor-dashboard"
+
+                  >
+
+
 
                     $
-                    {Number(factura.valor)
-                    .toLocaleString("es-CO")}
+
+                    {
+                      Number(
+                        factura.valor
+                      )
+                      .toLocaleString("es-CO")
+                    }
+
+
+
 
                   </strong>
+
+
+
 
 
 
                 </div>
 
 
+
+
+
               ))
+
+
+
 
 
             )
 
+
           }
+
 
 
 
@@ -498,7 +914,10 @@ function DashboardJefe() {
 
 
 
+
+
       </main>
+
 
 
 
@@ -506,10 +925,14 @@ function DashboardJefe() {
     </div>
 
 
+
   );
 
 
 }
+
+
+
 
 
 export default DashboardJefe;
