@@ -1,8 +1,8 @@
 /* =========================
-   PAGINA TRABAJADORES
+   PAGINA USUARIOS
 ========================= */
 
-.trabajadores-page {
+.usuarios-page {
 
     padding:35px;
 
@@ -19,7 +19,7 @@
 ========================= */
 
 
-.trabajadores-header {
+.usuarios-header {
 
     display:flex;
 
@@ -35,7 +35,7 @@
 
 
 
-.trabajadores-header h1 {
+.usuarios-header h1 {
 
     margin:0;
 
@@ -45,11 +45,13 @@
 
 
 
-.trabajadores-header p {
+.usuarios-header p {
 
     color:gray;
 
 }
+
+
 
 
 
@@ -96,9 +98,6 @@
 
 
 
-/* =========================
-   BOTON NUEVO
-========================= */
 
 
 .btn-nuevo {
@@ -120,10 +119,6 @@
 
 
 
-
-/* =========================
-   BOTON VOLVER
-========================= */
 
 
 .btn-volver {
@@ -151,7 +146,7 @@
 ========================= */
 
 
-.tabla-trabajadores {
+.tabla-usuarios {
 
 
     background:white;
@@ -166,6 +161,7 @@
 
 
 }
+
 
 
 
@@ -200,6 +196,8 @@ td {
     border-bottom:1px solid #ddd;
 
 }
+
+
 
 
 
@@ -249,8 +247,10 @@ td {
 
 
 
+
+
 /* =========================
-   BOTON ENTREGA DINERO
+   BOTON ENTREGA
 ========================= */
 
 
@@ -273,6 +273,8 @@ td {
 
 
 }
+
+
 
 
 
@@ -307,6 +309,8 @@ td {
 
 
 
+
+
 /* =========================
    BOTON ELIMINAR
 ========================= */
@@ -336,9 +340,6 @@ td {
 
 
 
-/* Separacion entre botones */
-
-
 td button {
 
     margin:5px;
@@ -352,11 +353,11 @@ td button {
 
 
 /* =========================
-   FORMULARIO
+   FORMULARIO USUARIO
 ========================= */
 
 
-.form-trabajador {
+.form-usuario {
 
 
     width:500px;
@@ -378,7 +379,9 @@ td button {
 
 
 
-.form-trabajador form {
+
+
+.form-usuario form {
 
 
     display:flex;
@@ -393,7 +396,8 @@ td button {
 
 
 
-.form-trabajador label {
+
+.form-usuario label {
 
 
     margin-top:10px;
@@ -408,8 +412,8 @@ td button {
 
 
 
-.form-trabajador input,
-.form-trabajador select {
+.form-usuario input,
+.form-usuario select {
 
 
     padding:14px;
@@ -428,14 +432,16 @@ td button {
 
 
 
-.form-trabajador input:focus,
-.form-trabajador select:focus {
+
+.form-usuario input:focus,
+.form-usuario select:focus {
 
 
     border-color:#c1121f;
 
 
 }
+
 
 
 
@@ -463,6 +469,8 @@ td button {
 
 
 
+
+
 .btn-guardar {
 
 
@@ -482,6 +490,7 @@ td button {
 
 
 }
+
 
 
 
@@ -521,7 +530,7 @@ td button {
 
 
 
-    .trabajadores-header {
+    .usuarios-header {
 
 
         flex-direction:column;
@@ -552,7 +561,8 @@ td button {
 
 
 
-    .form-trabajador {
+
+    .form-usuario {
 
 
         width:90%;
@@ -564,7 +574,8 @@ td button {
 
 
 
-    .tabla-trabajadores {
+
+    .tabla-usuarios {
 
 
         overflow-x:auto;

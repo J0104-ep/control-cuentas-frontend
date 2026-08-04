@@ -4,6 +4,7 @@
     padding: 40px;
 }
 
+
 .facturas-card {
     background: #fff;
     max-width: 1000px;
@@ -13,220 +14,436 @@
     box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
 }
 
+
 .facturas-card h1 {
     color: #c1121f;
     margin-bottom: 25px;
     text-align: center;
 }
 
+
 /*==========================
     BUSCADOR
 ===========================*/
+
 
 .buscar-factura {
     margin-bottom: 25px;
 }
 
+
 .buscar-factura input {
+
     width: 100%;
     padding: 14px;
     border-radius: 10px;
     border: 1px solid #ccc;
     font-size: 16px;
     transition: .3s;
+
 }
 
+
 .buscar-factura input:focus {
+
     outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 5px rgba(37, 99, 235, .3);
+
 }
+
 
 /*==========================
     TARJETA FACTURA
 ===========================*/
 
+
 .factura-item {
+
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+
     padding: 20px;
+
     border-radius: 15px;
+
     background: #fafafa;
+
     border: 1px solid #ddd;
+
     margin-bottom: 18px;
+
     transition: .25s;
+
 }
+
+
+
+/* FACTURA PENDIENTE */
+
+.factura-pendiente {
+
+    background: #fff3cd;
+
+    border: 2px solid #ffc107;
+
+}
+
+
+
+/* FACTURA PAGADA */
+
+.factura-pagada {
+
+    background: #d1e7dd;
+
+    border: 2px solid #198754;
+
+}
+
+
 
 .factura-item:hover {
+
     transform: translateY(-3px);
+
     box-shadow: 0 6px 15px rgba(0,0,0,.08);
+
 }
+
+
 
 .info-factura {
+
     flex: 1;
+
 }
+
+
 
 .info-factura h3 {
+
     color: #c1121f;
+
     margin-bottom: 10px;
+
 }
+
+
 
 .info-factura p {
+
     margin: 6px 0;
+
     color: #444;
+
 }
 
+
+
 .valor {
+
     margin-top: 12px;
+
     font-size: 22px;
+
     font-weight: bold;
+
     color: #16a34a;
+
 }
+
+
+
+/*==========================
+    ESTADO DE PAGO
+===========================*/
+
+
+.estado-pago {
+
+    padding: 6px 14px;
+
+    border-radius: 20px;
+
+    font-weight: bold;
+
+    display: inline-block;
+
+    text-transform: capitalize;
+
+}
+
+
+
+.estado-pago.pendiente {
+
+    background: #ffc107;
+
+    color: #000;
+
+}
+
+
+
+.estado-pago.pagada {
+
+    background: #198754;
+
+    color: white;
+
+}
+
+
+
+
 
 /*==========================
     BOTONES LATERALES
 ===========================*/
 
+
 .acciones-factura {
+
     display: flex;
+
     flex-direction: column;
+
     gap: 10px;
+
     min-width: 160px;
+
 }
+
+
 
 .acciones-factura a,
 .acciones-factura button {
+
     padding: 10px 15px;
+
     border: none;
+
     border-radius: 8px;
+
     cursor: pointer;
+
     text-decoration: none;
+
     text-align: center;
+
     color: white;
+
     font-weight: bold;
+
     transition: .3s;
+
     font-size: 14px;
+
 }
 
-/* Ver imagen */
+
+
+/* Imagen */
 
 .acciones-factura a {
+
     background: #2563eb;
+
 }
 
+
 .acciones-factura a:hover {
+
     background: #1d4ed8;
+
 }
+
+
 
 /* Editar */
 
 .acciones-factura .editar {
+
     background: #f59e0b;
+
 }
 
+
 .acciones-factura .editar:hover {
+
     background: #d97706;
+
 }
+
+
 
 /* Eliminar */
 
 .acciones-factura .eliminar {
+
     background: #c1121f;
+
 }
 
+
 .acciones-factura .eliminar:hover {
+
     background: #9d0d17;
+
 }
+
+
+
+
 
 /*==========================
     BOTONES INFERIORES
 ===========================*/
 
+
 .botones-inferiores {
+
     display: flex;
+
     justify-content: center;
+
     gap: 15px;
+
     margin-top: 35px;
+
 }
+
+
 
 .btn-nueva {
+
     background: #16a34a;
+
     color: white;
+
     border: none;
+
     padding: 14px 22px;
+
     border-radius: 10px;
+
     cursor: pointer;
+
     font-weight: bold;
-    transition: .3s;
+
 }
 
-.btn-nueva:hover {
-    background: #15803d;
-}
+
 
 .btn-volver {
+
     background: #111827;
+
     color: white;
+
     border: none;
+
     padding: 14px 22px;
+
     border-radius: 10px;
+
     cursor: pointer;
+
     font-weight: bold;
-    transition: .3s;
+
 }
 
-.btn-volver:hover {
-    background: #374151;
-}
+
+
+
 
 /*==========================
     SIN FACTURAS
 ===========================*/
 
+
 .sin-facturas {
+
     text-align: center;
+
     padding: 40px;
+
     color: #777;
+
     font-size: 18px;
+
 }
+
+
+
+
 
 /*==========================
     RESPONSIVE
 ===========================*/
 
-@media (max-width: 768px) {
+
+@media(max-width:768px){
+
 
     .facturas-container {
-        padding: 20px;
+
+        padding:20px;
+
     }
+
 
     .facturas-card {
-        padding: 20px;
+
+        padding:20px;
+
     }
+
 
     .factura-item {
-        flex-direction: column;
-        align-items: flex-start;
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
     }
 
+
+
     .acciones-factura {
-        width: 100%;
+
+        width:100%;
+
     }
+
+
 
     .acciones-factura a,
     .acciones-factura button {
-        width: 100%;
+
+        width:100%;
+
     }
 
+
+
     .botones-inferiores {
-        flex-direction: column;
+
+        flex-direction:column;
+
     }
+
+
 
     .btn-nueva,
     .btn-volver {
-        width: 100%;
+
+        width:100%;
+
     }
+
 
 }

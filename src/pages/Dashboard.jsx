@@ -5,98 +5,95 @@ import api from "../api/axios";
 import "../styles/dashboard.css";
 
 
-function DashboardTrabajador() {
+function Dashboard() {
 
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
 
-  const [menu,setMenu] = useState(false);
+const [menu,setMenu]=useState(false);
 
 
 
-  const hoy = new Date().toLocaleDateString("es-CO", {
-    weekday:"long",
-    day:"numeric",
-    month:"long",
-    year:"numeric",
-  });
+const usuario = JSON.parse(
+  localStorage.getItem("usuario")
+);
 
 
 
-  const usuario = JSON.parse(
-    localStorage.getItem("usuario")
-  );
 
+const hoy = new Date().toLocaleDateString("es-CO",{
 
+weekday:"long",
+day:"numeric",
+month:"long",
+year:"numeric"
 
+});
 
 
-  const [datos,setDatos] = useState({
 
-    totalVentas:0,
 
-    totalFacturas:0,
 
-    saldoPendiente:0,
 
-    ultimasFacturas:[]
 
-  });
+const [datos,setDatos]=useState({
 
+totalVentas:0,
+totalClientes:0,
+totalTrabajadores:0,
+totalFacturas:0,
+ultimasFacturas:[]
 
+});
 
 
 
 
 
-  useEffect(()=>{
 
 
-    if(usuario){
 
-      cargarDashboard();
 
-    }
+useEffect(()=>{
 
 
-  },[]);
+const cargarDashboard=async()=>{
 
 
+try{
 
 
+const respuesta =
+await api.get("/dashboard");
 
 
+setDatos(respuesta.data);
 
-  const cargarDashboard = async()=>{
 
 
-    try{
+}catch(error){
 
 
-      const respuesta =
-      await api.get(
-        `/dashboard/trabajador/${usuario.id}`
-      );
+console.error(
+"Error cargando dashboard:",
+error
+);
 
 
-      setDatos(respuesta.data);
+}
 
 
+};
 
-    }catch(error){
 
 
-      console.error(
-        "Error cargando dashboard trabajador",
-        error
-      );
+cargarDashboard();
 
 
-    }
+},[]);
 
 
-  };
 
 
 
@@ -105,20 +102,19 @@ function DashboardTrabajador() {
 
 
 
-  const cerrarSesion = ()=>{
 
+const cerrarSesion=()=>{
 
-    localStorage.removeItem("usuario");
-    localStorage.removeItem("usuario_id");
-    localStorage.removeItem("usuario_nombre");
-    localStorage.removeItem("usuario_rol");
-    localStorage.removeItem("sesion");
 
+localStorage.clear();
 
-    navigate("/login");
 
+navigate("/login");
 
-  };
+
+};
+
+
 
 
 
@@ -149,15 +145,19 @@ onClick={()=>setMenu(true)}
 
 
 
+
+
+
+
 <div className="dashboard">
 
 
 
 
 
-
 {
-menu && (
+
+menu &&
 
 <div
 
@@ -167,9 +167,10 @@ onClick={()=>setMenu(false)}
 
 ></div>
 
-)
 
 }
+
+
 
 
 
@@ -180,14 +181,21 @@ onClick={()=>setMenu(false)}
 <aside
 
 className={
+
 menu
+
 ?
+
 "sidebar activo-menu"
+
 :
+
 "sidebar"
+
 }
 
 >
+
 
 
 
@@ -216,24 +224,23 @@ onClick={()=>setMenu(false)}
 
 
 
+
 <div className="logo">
 
 
 <h2>
-
 CONTROL
-
 </h2>
 
 
 <span>
-
 CUENTAS
-
 </span>
 
 
 </div>
+
+
 
 
 
@@ -247,8 +254,6 @@ CUENTAS
 <ul>
 
 
-
-
 <li className="active">
 
 🏠 Inicio
@@ -260,13 +265,9 @@ CUENTAS
 
 
 
-<li
+<li onClick={()=>navigate("/facturas")}>
 
-onClick={()=>navigate("/facturas")}
-
->
-
-🧾 Mis Facturas
+🧾 Facturas
 
 </li>
 
@@ -276,13 +277,9 @@ onClick={()=>navigate("/facturas")}
 
 
 
-<li
+<li onClick={()=>navigate("/tiendas")}>
 
-onClick={()=>navigate("/nueva-factura")}
-
->
-
-➕ Nueva Factura
+🏪 Tiendas
 
 </li>
 
@@ -292,17 +289,23 @@ onClick={()=>navigate("/nueva-factura")}
 
 
 
+<li onClick={()=>navigate("/usuarios")}>
 
-<li
+👥 Usuarios
 
-onClick={cerrarSesion}
+</li>
 
->
+
+
+
+
+
+
+<li onClick={cerrarSesion}>
 
 🚪 Cerrar sesión
 
 </li>
-
 
 
 
@@ -318,6 +321,8 @@ onClick={cerrarSesion}
 
 
 </aside>
+
+
 
 
 
@@ -347,11 +352,8 @@ onClick={cerrarSesion}
 
 
 <h1>
-
 Inicio
-
 </h1>
-
 
 
 
@@ -361,11 +363,13 @@ Bienvenido{" "}
 
 {usuario?.nombre}
 
+
 </p>
 
 
 
 </div>
+
 
 
 
@@ -394,28 +398,29 @@ Bienvenido{" "}
 
 
 
-<div className="total-card">
 
+<div className="total-card">
 
 
 <h3>
 
-💰 Mis ventas de hoy
+💰 Total vendido hoy
 
 </h3>
 
 
 
 
-
 <h1>
-
 
 $
 
 {
+
 Number(datos.totalVentas)
+
 .toLocaleString("es-CO")
+
 }
 
 
@@ -425,20 +430,15 @@ Number(datos.totalVentas)
 
 
 
-
 <p>
 
-Ventas realizadas durante la jornada.
+Ventas registradas durante el día.
 
 </p>
 
 
 
-
 </div>
-
-
-
 
 
 
@@ -452,11 +452,11 @@ Ventas realizadas durante la jornada.
 
 
 
+
+
 <button
 
-onClick={()=>
-navigate("/nueva-factura")
-}
+onClick={()=>navigate("/nueva-factura")}
 
 >
 
@@ -466,11 +466,25 @@ navigate("/nueva-factura")
 
 
 
+
+
+
+
+<button
+
+onClick={()=>navigate("/nueva-tienda")}
+
+>
+
+🏪 Nueva Tienda
+
+</button>
+
+
+
+
+
 </div>
-
-
-
-
 
 
 
@@ -496,7 +510,6 @@ navigate("/nueva-factura")
 </h4>
 
 
-
 <span>
 
 {datos.totalFacturas}
@@ -504,9 +517,7 @@ navigate("/nueva-factura")
 </span>
 
 
-
 </div>
-
 
 
 
@@ -519,40 +530,63 @@ navigate("/nueva-factura")
 
 <h4>
 
-💵 Dinero pendiente
+🏪 Clientes
 
 </h4>
 
 
-
 <span>
 
-
-$
-
-{
-Number(datos.saldoPendiente || 0)
-.toLocaleString("es-CO")
-}
-
-
+{datos.totalClientes}
 
 </span>
 
 
+</div>
+
+
 
 </div>
 
 
 
+<div className="acciones">
+
+
+
+
+
+<button
+
+onClick={()=>navigate("/facturas")}
+
+>
+
+🧾 Ver Facturas
+
+</button>
+
+
+
+
+
+
+
+<button
+
+onClick={()=>navigate("/usuarios")}
+
+>
+
+👥 Usuarios
+
+</button>
+
+
+
 
 
 </div>
-
-
-
-
-
 
 
 
@@ -571,14 +605,11 @@ Number(datos.saldoPendiente || 0)
 <div className="titulo-ultimas">
 
 
-
 <h2>
 
-Mis últimas facturas
+Últimas facturas
 
 </h2>
-
-
 
 
 
@@ -587,9 +618,7 @@ Mis últimas facturas
 
 className="btn-ver-todas"
 
-onClick={()=>
-navigate("/facturas")
-}
+onClick={()=>navigate("/facturas")}
 
 >
 
@@ -609,16 +638,11 @@ Ver todas →
 
 
 
-
-
-
 {
 
 datos.ultimasFacturas.length===0
 
 ?
-
-(
 
 
 <div className="sinDatos">
@@ -628,16 +652,12 @@ No hay facturas registradas.
 </div>
 
 
-)
-
 
 :
 
-(
 
+datos.ultimasFacturas.map(factura=>(
 
-
-datos.ultimasFacturas.map((factura)=>(
 
 
 
@@ -656,22 +676,19 @@ key={factura.id}
 
 
 
-
-
 <strong>
 
 Factura #
 
 {
+
 String(factura.id)
+
 .substring(0,8)
 
 }
 
-
 </strong>
-
-
 
 
 
@@ -691,7 +708,6 @@ factura.clientes?.nombre ||
 
 }
 
-
 </p>
 
 
@@ -702,7 +718,7 @@ factura.clientes?.nombre ||
 
 <p>
 
-👤 Subido por:
+Registrada por:
 
 {" "}
 
@@ -710,12 +726,32 @@ factura.clientes?.nombre ||
 
 factura.usuarios?.nombre ||
 
-usuario?.nombre ||
-
-"Usuario"
+"Sin usuario"
 
 }
 
+</p>
+
+
+
+
+
+
+
+
+<p>
+
+💳 Estado:
+
+{" "}
+
+{
+
+factura.estado_pago ||
+
+"Pendiente"
+
+}
 
 </p>
 
@@ -738,16 +774,6 @@ usuario?.nombre ||
 
 
 
-<p>
-
-🕒 {factura.hora?.substring(0,5)}
-
-</p>
-
-
-
-
-
 </div>
 
 
@@ -757,12 +783,7 @@ usuario?.nombre ||
 
 
 
-
-<strong
-
-className="valor-dashboard"
-
->
+<strong className="valor-dashboard">
 
 
 $
@@ -770,14 +791,14 @@ $
 {
 
 Number(factura.valor)
+
 .toLocaleString("es-CO")
 
 }
 
 
+
 </strong>
-
-
 
 
 
@@ -790,9 +811,6 @@ Number(factura.valor)
 ))
 
 
-)
-
-
 
 }
 
@@ -801,7 +819,11 @@ Number(factura.valor)
 
 
 
+
+
+
 </div>
+
 
 
 
@@ -823,7 +845,10 @@ Number(factura.valor)
 
 
 
+
+
 </>
+
 
 
 );
@@ -834,4 +859,4 @@ Number(factura.valor)
 
 
 
-export default DashboardTrabajador;
+export default Dashboard;

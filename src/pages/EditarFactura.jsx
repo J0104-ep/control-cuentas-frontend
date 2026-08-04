@@ -4,865 +4,327 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
 import "../styles/nuevaFactura.css";
 
-
 function EditarFactura() {
 
-
-  const navigate = useNavigate();
-
-  const { id } = useParams();
-
-
-
-  const [clientes, setClientes] = useState([]);
-
-  const [busqueda, setBusqueda] = useState("");
-
-
-
-  const [formulario, setFormulario] = useState({
-
-    cliente_id:"",
-    valor:"",
-    fecha:"",
-    hora:""
-
-  });
-
-
-
-  const [imagen,setImagen] = useState(null);
-
-  const [vistaPrevia,setVistaPrevia] = useState(null);
-
-
-
-
-
-
-
-  useEffect(()=>{
-
-    cargarClientes();
-
-    cargarFactura();
-
-  },[]);
-
-
-
-
-
-
-
-  const cargarClientes = async()=>{
-
-
-    try{
-
-
-      const respuesta = await api.get("/clientes");
-
-
-      setClientes(respuesta.data);
-
-
-
-    }catch(error){
-
-
-      console.error(
-        "Error cargando clientes:",
-        error
-      );
-
-
-    }
-
-
-  };
-
-
-
-
-
-
-
-
-
-  const cargarFactura = async()=>{
-
-
-    try{
-
-
-      const respuesta = await api.get(
-        `/facturas/${id}`
-      );
-
-
-      const factura = respuesta.data;
-
-
-
-
-      setFormulario({
-
-        cliente_id:factura.cliente_id,
-
-        valor:factura.valor,
-
-        fecha:factura.fecha,
-
-        hora:
-        factura.hora
-        ?
-        factura.hora.substring(0,5)
-        :
-        ""
-
-      });
-
-
-
-
-
-
-      if(factura.foto_url){
-
-
-        setVistaPrevia(
-          factura.foto_url
-        );
-
-
-      }
-
-
-
-
-
-    }catch(error){
-
-
-      console.error(
-        "Error cargando factura:",
-        error
-      );
-
-
-    }
-
-
-  };
-
-
-
-
-
-
-
-
-
-  const cambiarCampo=(e)=>{
-
-
-    setFormulario({
-
-      ...formulario,
-
-      [e.target.name]:e.target.value
-
+    const navigate = useNavigate();
+    const { id } = useParams();
+
+    const [clientes, setClientes] = useState([]);
+    const [busqueda, setBusqueda] = useState("");
+
+    const [formulario, setFormulario] = useState({
+        cliente_id: "",
+        valor: "",
+        estado_pago: "pendiente"
     });
 
+    const [imagen, setImagen] = useState(null);
+    const [vistaPrevia, setVistaPrevia] = useState(null);
 
-  };
+    useEffect(() => {
+        cargarClientes();
+        cargarFactura();
+    }, [id]);
 
+    // ============================
+    // CARGAR CLIENTES
+    // ============================
 
+    const cargarClientes = async () => {
 
+        try {
 
+            const respuesta = await api.get("/clientes");
 
+            setClientes(respuesta.data);
 
+        } catch (error) {
 
-
-
-  const seleccionarImagen=(e)=>{
-
-
-    const archivo=e.target.files[0];
-
-
-    if(!archivo)return;
-
-
-
-    setImagen(archivo);
-
-
-
-    setVistaPrevia(
-
-      URL.createObjectURL(archivo)
-
-    );
-
-
-  };
-
-
-
-
-
-
-
-
-
-  const actualizarFactura=async(e)=>{
-
-
-    e.preventDefault();
-
-
-
-    try{
-
-
-      const datos=new FormData();
-
-
-
-
-      datos.append(
-        "cliente_id",
-        formulario.cliente_id
-      );
-
-
-
-      datos.append(
-        "valor",
-        formulario.valor
-      );
-
-
-
-      datos.append(
-        "fecha",
-        formulario.fecha
-      );
-
-
-
-      datos.append(
-        "hora",
-        formulario.hora
-      );
-
-
-
-
-
-      if(imagen){
-
-
-        datos.append(
-          "imagen",
-          imagen
-        );
-
-
-      }
-
-
-
-
-
-
-
-      await api.put(
-
-        `/facturas/${id}`,
-
-        datos,
-
-        {
-
-          headers:{
-
-            "Content-Type":
-            "multipart/form-data"
-
-          }
+            console.error("Error cargando clientes", error);
 
         }
 
-      );
+    };
 
+    // ============================
+    // CARGAR FACTURA
+    // ============================
 
+    const cargarFactura = async () => {
 
+        try {
 
+            const respuesta = await api.get(`/facturas/${id}`);
 
+            const factura = respuesta.data;
 
-      alert(
-        "Factura actualizada correctamente"
-      );
+            console.log("Factura cargada:", factura);
 
+            setFormulario({
+                cliente_id: factura.cliente_id,
+                valor: factura.valor,
+                estado_pago: factura.estado_pago || "pendiente"
+            });
 
+            if (factura.foto_url) {
+                setVistaPrevia(factura.foto_url);
+            }
 
-      navigate("/facturas");
+        } catch (error) {
 
+            console.error("Error cargando factura", error);
 
+        }
 
+    };
 
+    // ============================
+    // CAMBIAR CAMPOS
+    // ============================
 
-    }catch(error){
+    const cambiarCampo = (e) => {
 
+        setFormulario({
+            ...formulario,
+            [e.target.name]: e.target.value
+        });
 
-      console.error(error);
+    };
 
+    // ============================
+    // IMAGEN
+    // ============================
 
+    const seleccionarImagen = (e) => {
 
-      alert(
-        "Error actualizando factura"
-      );
+        const archivo = e.target.files[0];
 
+        if (!archivo) return;
 
-    }
+        setImagen(archivo);
 
+        setVistaPrevia(
+            URL.createObjectURL(archivo)
+        );
 
-  };
+    };
 
+    // ============================
+    // ACTUALIZAR
+    // ============================
 
+    const actualizarFactura = async (e) => {
 
+        e.preventDefault();
 
+        try {
 
+            const datos = new FormData();
 
+            datos.append("cliente_id", formulario.cliente_id);
+            datos.append("valor", formulario.valor);
+            datos.append("estado_pago", formulario.estado_pago);
 
+            if (imagen) {
+                datos.append("imagen", imagen);
+            }
 
+            console.log("Estado enviado:", formulario.estado_pago);
 
-  const clientesFiltrados = clientes.filter(cliente=>
+            await api.put(
+                `/facturas/${id}`,
+                datos,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                }
+            );
 
+            alert("Factura actualizada correctamente");
 
-    cliente.nombre
-    .toLowerCase()
-    .includes(
-      busqueda.toLowerCase()
-    )
+            navigate("/facturas");
 
+        } catch (error) {
 
-  );
+            console.error(
+                "Error actualizando factura:",
+                error.response?.data || error
+            );
 
+            alert(
+                error.response?.data?.mensaje ||
+                "Error actualizando factura"
+            );
 
+        }
 
+    };
 
+    const clientesFiltrados = clientes.filter(cliente =>
+        cliente.nombre
+            .toLowerCase()
+            .includes(busqueda.toLowerCase())
+    );
 
+    return (
 
+        <div className="factura-container">
 
+            <div className="factura-card">
 
+                <h1>✏ Editar Factura</h1>
 
-  return (
+                <form onSubmit={actualizarFactura}>
 
+                    <div className="form-grupo">
 
-    <div className="factura-container">
+                        <label>Buscar cliente</label>
 
+                        <input
+                            type="text"
+                            placeholder="🔎 Buscar cliente..."
+                            value={busqueda}
+                            onChange={(e) => setBusqueda(e.target.value)}
+                        />
 
+                        <select
+                            name="cliente_id"
+                            value={formulario.cliente_id}
+                            onChange={cambiarCampo}
+                            required
+                        >
 
-      <div className="factura-card">
+                            <option value="">
+                                Seleccione cliente
+                            </option>
 
+                            {clientesFiltrados.map(cliente => (
 
+                                <option
+                                    key={cliente.id}
+                                    value={cliente.id}
+                                >
+                                    {cliente.nombre}
+                                </option>
 
+                            ))}
 
+                        </select>
 
-        <div className="factura-header-editar">
+                    </div>
 
+                    <div className="form-grupo">
 
+                        <label>Valor</label>
 
-          <div className="factura-titulo-editar">
+                        <input
+                            type="number"
+                            name="valor"
+                            value={formulario.valor}
+                            onChange={cambiarCampo}
+                            required
+                        />
 
+                    </div>
 
-            <h1>
-              ✏ Editar Factura
-            </h1>
+                    <div className="form-grupo">
 
+                        <label>Estado de pago</label>
 
+                        <select
+                            name="estado_pago"
+                            value={formulario.estado_pago}
+                            onChange={cambiarCampo}
+                            required
+                        >
 
-            <p>
-              Actualización de información de factura
-            </p>
+                            <option value="pendiente">
+                                Pendiente
+                            </option>
 
+                            <option value="pagada">
+                                Pagada
+                            </option>
 
-          </div>
+                        </select>
 
+                    </div>
 
+                    <div className="form-grupo">
 
+                        <label>Imagen factura</label>
 
+                        <div className="opciones-imagen">
 
+                            <label className="btn-imagen">
 
+                                📷 Tomar foto
 
-          <button
+                                <input
+                                    hidden
+                                    type="file"
+                                    accept="image/*"
+                                    capture="environment"
+                                    onChange={seleccionarImagen}
+                                />
 
+                            </label>
 
-            className="btn-volver-factura"
+                            <label className="btn-imagen">
 
+                                🖼️ Galería
 
-            type="button"
+                                <input
+                                    hidden
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={seleccionarImagen}
+                                />
 
+                            </label>
 
-            onClick={()=>navigate("/dashboard")}
+                        </div>
 
+                    </div>
 
-          >
+                    {vistaPrevia && (
 
+                        <img
+                            src={vistaPrevia}
+                            alt="Factura"
+                            className="preview-factura"
+                        />
 
-            🏠 Volver
+                    )}
 
+                    <div className="botones">
 
-          </button>
+                        <button
+                            className="btn-guardar"
+                            type="submit"
+                        >
+                            💾 Guardar Cambios
+                        </button>
 
+                        <button
+                            type="button"
+                            className="btn-cancelar"
+                            onClick={() => navigate("/facturas")}
+                        >
+                            Cancelar
+                        </button>
 
+                    </div>
 
+                </form>
 
+            </div>
 
         </div>
 
-
-
-
-
-
-
-
-
-        <form onSubmit={actualizarFactura}>
-
-
-          <div className="form-grupo">
-
-
-            <label>
-              Buscar cliente
-            </label>
-
-
-
-
-            <div className="busqueda-cliente">
-
-
-              <input
-
-                type="text"
-
-                placeholder="🔎 Buscar cliente..."
-
-                value={busqueda}
-
-                onChange={(e)=>
-                  setBusqueda(e.target.value)
-                }
-
-              />
-
-
-            </div>
-
-
-
-
-
-
-
-            <select
-
-
-              name="cliente_id"
-
-
-              value={formulario.cliente_id}
-
-
-              onChange={cambiarCampo}
-
-
-              required
-
-
-            >
-
-
-
-              <option value="">
-
-
-                Seleccione un cliente
-
-
-              </option>
-
-
-
-
-
-              {
-
-                clientesFiltrados.map(cliente=>(
-
-
-                  <option
-
-
-                    key={cliente.id}
-
-
-                    value={cliente.id}
-
-
-                  >
-
-
-                    {cliente.nombre}
-
-
-                  </option>
-
-
-                ))
-
-              }
-
-
-
-
-            </select>
-
-
-
-          </div>
-
-
-
-
-
-
-
-
-
-          <div className="form-grupo">
-
-
-            <label>
-              Valor
-            </label>
-
-
-
-            <input
-
-
-              type="number"
-
-
-              name="valor"
-
-
-              value={formulario.valor}
-
-
-              onChange={cambiarCampo}
-
-
-              required
-
-
-            />
-
-
-          </div>
-
-
-
-
-
-
-
-
-
-          <div className="form-grupo">
-
-
-            <label>
-              Fecha
-            </label>
-
-
-
-            <input
-
-
-              type="date"
-
-
-              name="fecha"
-
-
-              value={formulario.fecha}
-
-
-              onChange={cambiarCampo}
-
-
-              required
-
-
-            />
-
-
-          </div>
-
-
-
-
-
-
-
-
-
-          <div className="form-grupo">
-
-
-            <label>
-              Hora
-            </label>
-
-
-
-            <input
-
-
-              type="time"
-
-
-              name="hora"
-
-
-              value={formulario.hora}
-
-
-              onChange={cambiarCampo}
-
-
-              required
-
-
-            />
-
-
-          </div>
-
-
-
-
-
-
-
-
-
-          <div className="form-grupo">
-
-
-            <label>
-              Imagen de la factura
-            </label>
-
-
-
-
-            <div className="opciones-imagen">
-
-
-
-              <label className="btn-imagen">
-
-
-                📷 Tomar foto
-
-
-
-                <input
-
-                  hidden
-
-                  type="file"
-
-                  accept="image/*"
-
-                  capture="environment"
-
-                  onChange={seleccionarImagen}
-
-                />
-
-
-              </label>
-
-
-
-
-
-
-
-              <label className="btn-imagen">
-
-
-                🖼️ Galería
-
-
-
-                <input
-
-                  hidden
-
-                  type="file"
-
-                  accept="image/*"
-
-                  onChange={seleccionarImagen}
-
-                />
-
-
-              </label>
-
-
-
-
-            </div>
-
-
-          </div>
-
-
-
-
-
-
-
-
-
-          {
-
-            vistaPrevia && (
-
-
-              <img
-
-
-                src={vistaPrevia}
-
-
-                alt="Factura"
-
-
-                className="preview-factura"
-
-
-              />
-
-
-            )
-
-          }
-
-
-
-
-
-
-
-
-
-          <div className="botones">
-
-
-
-            <button
-
-
-              type="submit"
-
-
-              className="btn-guardar"
-
-
-            >
-
-
-              💾 Guardar Cambios
-
-
-            </button>
-
-
-
-
-
-
-
-
-
-            <button
-
-
-              type="button"
-
-
-              className="btn-cancelar"
-
-
-              onClick={()=>navigate("/facturas")}
-
-
-            >
-
-
-              Cancelar
-
-
-            </button>
-
-
-
-
-
-          </div>
-
-
-
-
-
-
-
-
-        </form>
-
-
-
-
-
-      </div>
-
-
-
-
-
-    </div>
-
-
-  );
-
+    );
 
 }
-
-
 
 export default EditarFactura;

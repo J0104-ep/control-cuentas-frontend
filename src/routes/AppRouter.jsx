@@ -1,189 +1,222 @@
 import {
-  BrowserRouter,
-  Routes,
-  Route
+    BrowserRouter,
+    Routes,
+    Route
 } from "react-router-dom";
 
 
-// Login
+// LOGIN
 import Login from "../pages/Login";
 
 
-// Dashboard
-import DashboardJefe from "../pages/DashboardJefe";
-import DashboardTrabajador from "../pages/DashboardTrabajador";
+// DASHBOARD
+import Dashboard from "../pages/Dashboard";
 
 
-// Facturas
+// FACTURAS
 import Facturas from "../pages/Facturas";
 import NuevaFactura from "../pages/NuevaFactura";
 import EditarFactura from "../pages/EditarFactura";
 
 
-// Tiendas
+// TIENDAS
 import Tiendas from "../pages/Tiendas";
 import NuevaTienda from "../pages/NuevaTienda";
 import EditarTienda from "../pages/EditarTienda";
 
 
-// Trabajadores
-import Trabajadores from "../pages/Trabajadores";
-import NuevoTrabajador from "../pages/NuevoTrabajador";
-import EditarTrabajador from "../pages/EditarTrabajador";
+// USUARIOS
+import Usuarios from "../pages/Usuarios";
+import NuevoUsuario from "../pages/NuevoUsuario";
+import EditarUsuario from "../pages/EditarUsuario";
 
 
 
-function AppRouter() {
 
 
-  return (
+function AppRouter(){
 
 
-    <BrowserRouter>
+return(
 
 
-      <Routes>
+<BrowserRouter>
 
 
+<Routes>
 
-        {/* =================
-            LOGIN
-        ================= */}
 
 
-        <Route
-          path="/"
-          element={<Login />}
-        />
+{/* =================
+    LOGIN
+================= */}
 
 
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+<Route
 
+path="/"
 
+element={<Login />}
 
+/>
 
 
+<Route
 
-        {/* =================
-            DASHBOARD JEFE
-        ================= */}
+path="/login"
 
+element={<Login />}
 
-        <Route
-          path="/dashboard"
-          element={<DashboardJefe />}
-        />
+/>
 
 
 
 
 
-        {/* =================
-            DASHBOARD TRABAJADOR
-        ================= */}
+{/* =================
+    DASHBOARD
+================= */}
 
 
-        <Route
-          path="/dashboard-trabajador"
-          element={<DashboardTrabajador />}
-        />
+<Route
 
+path="/dashboard"
 
+element={<Dashboard />}
 
+/>
 
 
 
 
-        {/* =================
-            FACTURAS
-        ================= */}
 
 
-        <Route
-          path="/facturas"
-          element={<Facturas />}
-        />
 
+{/* =================
+    FACTURAS
+================= */}
 
-        <Route
-          path="/nueva-factura"
-          element={<NuevaFactura />}
-        />
 
+<Route
 
-        <Route
-          path="/editar-factura/:id"
-          element={<EditarFactura />}
-        />
+path="/facturas"
 
+element={<Facturas />}
 
+/>
 
 
 
+<Route
 
+path="/nueva-factura"
 
-        {/* =================
-            TIENDAS
-        ================= */}
+element={<NuevaFactura />}
 
+/>
 
-        <Route
-          path="/tiendas"
-          element={<Tiendas />}
-        />
 
 
-        <Route
-          path="/nueva-tienda"
-          element={<NuevaTienda />}
-        />
+<Route
 
+path="/editar-factura/:id"
 
-        <Route
-          path="/editar-tienda/:id"
-          element={<EditarTienda />}
-        />
+element={<EditarFactura />}
 
+/>
 
 
 
 
 
 
-        {/* =================
-            TRABAJADORES
-        ================= */}
 
 
-        <Route
-          path="/trabajadores"
-          element={<Trabajadores />}
-        />
+{/* =================
+    TIENDAS
+================= */}
 
 
-        <Route
-          path="/nuevo-trabajador"
-          element={<NuevoTrabajador />}
-        />
+<Route
 
+path="/tiendas"
 
-        <Route
-          path="/editar-trabajador/:id"
-          element={<EditarTrabajador />}
-        />
+element={<Tiendas />}
 
+/>
 
 
-      </Routes>
 
+<Route
 
-    </BrowserRouter>
+path="/nueva-tienda"
 
+element={<NuevaTienda />}
 
-  );
+/>
+
+
+
+<Route
+
+path="/editar-tienda/:id"
+
+element={<EditarTienda />}
+
+/>
+
+
+
+
+
+
+
+
+
+{/* =================
+    USUARIOS
+================= */}
+
+
+<Route
+
+path="/usuarios"
+
+element={<Usuarios />}
+
+/>
+
+
+
+<Route
+
+path="/nuevo-usuario"
+
+element={<NuevoUsuario />}
+
+/>
+
+
+
+<Route
+
+path="/editar-usuario/:id"
+
+element={<EditarUsuario />}
+
+/>
+
+
+
+
+
+</Routes>
+
+
+</BrowserRouter>
+
+
+);
 
 
 }

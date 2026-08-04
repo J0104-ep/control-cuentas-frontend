@@ -5,15 +5,16 @@ import api from "../api/axios";
 import "../styles/login.css";
 
 
-function Login(){
+function Login() {
 
 
     const navigate = useNavigate();
 
 
-    const [nombre,setNombre] = useState("");
+    const [nombre, setNombre] = useState("");
 
-    const [cargando,setCargando] = useState(false);
+    const [cargando, setCargando] = useState(false);
+
 
 
 
@@ -21,61 +22,37 @@ function Login(){
     // VERIFICAR SESION DEL DIA
     // =====================================
 
-    useEffect(()=>{
+    useEffect(() => {
 
 
         const usuarioGuardado =
-        localStorage.getItem("usuario");
+            localStorage.getItem("usuario");
 
 
         const sesionGuardada =
-        localStorage.getItem("sesion");
+            localStorage.getItem("sesion");
 
 
 
         const hoy =
-        new Date()
-        .toISOString()
-        .split("T")[0];
+            new Date()
+                .toISOString()
+                .split("T")[0];
 
 
 
 
-
-        if(
+        if (
             usuarioGuardado &&
             sesionGuardada === hoy
-        ){
+        ) {
 
-
-            const usuario =
-            JSON.parse(usuarioGuardado);
-
-
-
-
-
-            if(usuario.rol === "jefe"){
-
-
-                navigate("/dashboard");
-
-
-            }else{
-
-
-                navigate("/dashboard-trabajador");
-
-
-            }
-
+            navigate("/dashboard");
 
         }
 
 
-
-    },[navigate]);
-
+    }, [navigate]);
 
 
 
@@ -83,21 +60,19 @@ function Login(){
 
 
 
-
-    const iniciarSesion = async(e)=>{
+    const iniciarSesion = async (e) => {
 
 
         e.preventDefault();
 
 
 
-        if(nombre.trim()===""){
+        if (nombre.trim() === "") {
 
 
             alert("Ingrese su nombre");
 
             return;
-
 
         }
 
@@ -106,9 +81,7 @@ function Login(){
 
 
 
-
-        try{
-
+        try {
 
 
             setCargando(true);
@@ -116,15 +89,17 @@ function Login(){
 
 
 
-
-
             const respuesta =
-            await api.post(
-                "/auth/login",
-                {
-                    nombre:nombre.trim()
-                }
-            );
+                await api.post(
+
+                    "/auth/login",
+
+                    {
+                        nombre: nombre.trim()
+                    }
+
+                );
+
 
 
 
@@ -132,21 +107,16 @@ function Login(){
 
 
             const usuario =
-            respuesta.data.usuario;
+                respuesta.data.usuario;
 
 
 
 
-
-
-
-
-            // Fecha actual
 
             const hoy =
-            new Date()
-            .toISOString()
-            .split("T")[0];
+                new Date()
+                    .toISOString()
+                    .split("T")[0];
 
 
 
@@ -154,7 +124,7 @@ function Login(){
 
 
 
-            // Guardar usuario completo
+            // Guardar usuario
 
             localStorage.setItem(
 
@@ -169,25 +139,27 @@ function Login(){
 
 
 
-            // Guardar datos del usuario
 
             localStorage.setItem(
+
                 "usuario_id",
+
                 usuario.id
+
             );
 
 
 
+
+
+
+
             localStorage.setItem(
+
                 "usuario_nombre",
+
                 usuario.nombre
-            );
 
-
-
-            localStorage.setItem(
-                "usuario_rol",
-                usuario.rol
             );
 
 
@@ -195,11 +167,13 @@ function Login(){
 
 
 
-            // Guardar sesión del día
 
             localStorage.setItem(
+
                 "sesion",
+
                 hoy
+
             );
 
 
@@ -209,24 +183,9 @@ function Login(){
 
 
 
+            // Todos entran al mismo dashboard
 
-            if(usuario.rol === "jefe"){
-
-
-
-                navigate("/dashboard");
-
-
-
-            }else{
-
-
-
-                navigate("/dashboard-trabajador");
-
-
-
-            }
+            navigate("/dashboard");
 
 
 
@@ -234,19 +193,24 @@ function Login(){
 
 
 
-        }catch(error){
+        } catch (error) {
 
 
 
             console.error(
+
                 error.response?.data || error
+
             );
+
+
 
 
 
             alert(
 
                 error.response?.data?.mensaje ||
+
                 "Error iniciando sesión"
 
             );
@@ -255,16 +219,13 @@ function Login(){
 
 
 
-        }finally{
-
+        } finally {
 
 
             setCargando(false);
 
 
-
         }
-
 
 
 
@@ -278,7 +239,7 @@ function Login(){
 
 
 
-    return(
+    return (
 
 
         <div className="login-container">
@@ -291,7 +252,6 @@ function Login(){
                 <h1>
                     👋 Bienvenido
                 </h1>
-
 
 
 
@@ -321,13 +281,12 @@ function Login(){
                         value={nombre}
 
 
-                        onChange={(e)=>
+                        onChange={(e) =>
                             setNombre(e.target.value)
                         }
 
 
                     />
-
 
 
 
@@ -348,16 +307,23 @@ function Login(){
 
 
                         {
+
                             cargando
-                            ?
-                            "Ingresando..."
-                            :
-                            "Entrar"
+
+                                ?
+
+                                "Ingresando..."
+
+                                :
+
+                                "Entrar"
+
                         }
 
 
 
                     </button>
+
 
 
 
@@ -374,10 +340,7 @@ function Login(){
 
 
 
-
-
         </div>
-
 
 
     );
