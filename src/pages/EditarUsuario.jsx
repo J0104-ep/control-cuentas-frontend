@@ -13,12 +13,21 @@ function EditarUsuario() {
     const { id } = useParams();
 
 
+
     const [formulario, setFormulario] = useState({
 
         nombre: "",
-        estado: "Activo"
+
+        estado: "Activo",
+
+        total_ventas: 0,
+
+        dinero_entregado: 0,
+
+        saldo_pendiente: 0
 
     });
+
 
 
     const [cargando, setCargando] = useState(true);
@@ -28,11 +37,9 @@ function EditarUsuario() {
 
 
 
-    useEffect(() => {
-
+    useEffect(()=>{
 
         cargarUsuario();
-
 
     }, []);
 
@@ -47,16 +54,15 @@ function EditarUsuario() {
     // =========================
 
 
-    const cargarUsuario = async () => {
+    const cargarUsuario = async()=>{
 
 
-        try {
+        try{
 
 
             const respuesta = await api.get(
                 `/usuarios/${id}`
             );
-
 
 
             const usuario = respuesta.data;
@@ -65,23 +71,53 @@ function EditarUsuario() {
 
             setFormulario({
 
-                nombre: usuario.nombre || "",
 
-                estado: usuario.activo
-                    ? "Activo"
-                    : "Inactivo"
+                nombre:
+                usuario.nombre || "",
+
+
+
+                estado:
+
+                usuario.activo
+
+                ?
+
+                "Activo"
+
+                :
+
+                "Inactivo",
+
+
+
+                total_ventas:
+
+                usuario.total_ventas || 0,
+
+
+
+                dinero_entregado:
+
+                usuario.dinero_entregado || 0,
+
+
+
+                saldo_pendiente:
+
+                usuario.saldo_pendiente || 0
+
 
             });
 
 
 
-
-        } catch (error) {
+        }catch(error){
 
 
             console.error(
                 "Error cargando usuario:",
-                error.response?.data || error
+                error
             );
 
 
@@ -93,7 +129,8 @@ function EditarUsuario() {
             navigate("/usuarios");
 
 
-        } finally {
+
+        }finally{
 
 
             setCargando(false);
@@ -111,19 +148,23 @@ function EditarUsuario() {
 
 
 
+
     // =========================
     // CAMBIO INPUTS
     // =========================
 
 
-    const cambiarCampo = (e) => {
+    const cambiarCampo=(e)=>{
 
 
         setFormulario({
 
             ...formulario,
 
-            [e.target.name]: e.target.value
+            [e.target.name]:
+
+            e.target.value
+
 
         });
 
@@ -143,14 +184,34 @@ function EditarUsuario() {
     // =========================
 
 
-    const guardarCambios = async (e) => {
+    const guardarCambios = async(e)=>{
 
 
         e.preventDefault();
 
 
 
-        try {
+        try{
+
+
+
+            const ventas =
+            Number(formulario.total_ventas);
+
+
+
+            const entregado =
+            Number(formulario.dinero_entregado);
+
+
+
+            const pendiente =
+            Math.max(
+                0,
+                ventas - entregado
+            );
+
+
 
 
 
@@ -160,9 +221,30 @@ function EditarUsuario() {
 
                 {
 
-                    nombre: formulario.nombre,
 
-                    estado: formulario.estado
+                    nombre:
+                    formulario.nombre,
+
+
+
+                    estado:
+                    formulario.estado,
+
+
+
+                    total_ventas:
+                    ventas,
+
+
+
+                    dinero_entregado:
+                    entregado,
+
+
+
+                    saldo_pendiente:
+                    pendiente
+
 
                 }
 
@@ -183,7 +265,8 @@ function EditarUsuario() {
 
 
 
-        } catch (error) {
+
+        }catch(error){
 
 
             console.error(
@@ -197,10 +280,9 @@ function EditarUsuario() {
 
 
             alert(
-
                 "Error actualizando usuario"
-
             );
+
 
 
         }
@@ -219,11 +301,12 @@ function EditarUsuario() {
     if(cargando){
 
 
-        return (
+        return(
 
             <div className="factura-container">
 
                 <div className="factura-card">
+
 
                     <h2>
                         Cargando usuario...
@@ -232,7 +315,9 @@ function EditarUsuario() {
 
                 </div>
 
+
             </div>
+
 
         );
 
@@ -246,8 +331,7 @@ function EditarUsuario() {
 
 
 
-
-    return (
+    return(
 
 
 
@@ -261,6 +345,8 @@ function EditarUsuario() {
                 <h1>
                     ✏ Editar Usuario
                 </h1>
+
+
 
 
 
@@ -294,6 +380,8 @@ function EditarUsuario() {
 
 
                     </div>
+
+
 
 
 
@@ -337,7 +425,6 @@ function EditarUsuario() {
                             </option>
 
 
-
                         </select>
 
 
@@ -351,7 +438,118 @@ function EditarUsuario() {
 
 
 
+
+                    <div className="form-grupo">
+
+
+                        <label>
+                            Ventas
+                        </label>
+
+
+
+                        <input
+
+                            type="number"
+
+                            name="total_ventas"
+
+                            value={formulario.total_ventas}
+
+                            onChange={cambiarCampo}
+
+                        />
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+                    <div className="form-grupo">
+
+
+                        <label>
+                            Dinero entregado
+                        </label>
+
+
+
+                        <input
+
+                            type="number"
+
+                            name="dinero_entregado"
+
+                            value={formulario.dinero_entregado}
+
+                            onChange={cambiarCampo}
+
+                        />
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+                    <div className="form-grupo">
+
+
+                        <label>
+                            Pendiente
+                        </label>
+
+
+
+                        <input
+
+                            type="number"
+
+                            value={
+
+                                Math.max(
+
+                                    0,
+
+                                    Number(formulario.total_ventas)
+
+                                    -
+
+                                    Number(formulario.dinero_entregado)
+
+                                )
+
+                            }
+
+                            disabled
+
+                        />
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
                     <div className="botones">
+
+
 
 
 
@@ -373,13 +571,16 @@ function EditarUsuario() {
 
 
 
+
                         <button
 
                             className="btn-cancelar"
 
                             type="button"
 
-                            onClick={() => navigate("/usuarios")}
+                            onClick={() =>
+                                navigate("/usuarios")
+                            }
 
                         >
 
@@ -387,6 +588,8 @@ function EditarUsuario() {
 
 
                         </button>
+
+
 
 
 
@@ -401,11 +604,13 @@ function EditarUsuario() {
 
 
 
+
             </div>
 
 
 
         </div>
+
 
 
     );

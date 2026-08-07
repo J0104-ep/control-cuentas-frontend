@@ -8,16 +8,18 @@ import "../styles/nuevatienda.css";
 function NuevaTienda(){
 
 
-const navigate=useNavigate();
+const navigate = useNavigate();
+
+
+const [nombre,setNombre] = useState("");
+
+const [dia,setDia] = useState("");
 
 
 
-const [nombre,setNombre]=useState("");
 
 
-
-
-const guardarTienda=async(e)=>{
+const guardarTienda = async(e)=>{
 
 
 e.preventDefault();
@@ -28,7 +30,9 @@ try{
 
 await api.post("/clientes",{
 
-    nombre
+    nombre,
+
+    dia
 
 });
 
@@ -59,7 +63,11 @@ alert("Error creando tienda");
 
 
 
+
+
+
 return(
+
 
 <div className="tienda-container">
 
@@ -68,22 +76,11 @@ return(
 
 
 
-<div className="factura-header">
-
-
-<div className="titulo-factura">
-
 <h1>
 🏪 Nueva Tienda
 </h1>
 
 
-<p>
-Registro de nueva tienda
-</p>
-
-
-</div>
 
 
 
@@ -101,9 +98,6 @@ onClick={()=>navigate("/dashboard")}
 </button>
 
 
-</div>
-
-
 
 
 
@@ -118,13 +112,16 @@ Nombre de la tienda
 </label>
 
 
+
 <input
 
 type="text"
 
 value={nombre}
 
-onChange={(e)=>setNombre(e.target.value)}
+onChange={(e)=>
+setNombre(e.target.value)
+}
 
 placeholder="Ej: Tienda El Centro"
 
@@ -139,12 +136,91 @@ required
 
 
 
+
+
+<div className="form-grupo">
+
+
+<label>
+Día de visita
+</label>
+
+
+
+<select
+
+value={dia}
+
+onChange={(e)=>
+setDia(e.target.value)
+}
+
+required
+
+>
+
+
+<option value="">
+Seleccione día
+</option>
+
+
+<option value="Lunes">
+Lunes
+</option>
+
+
+<option value="Martes">
+Martes
+</option>
+
+
+<option value="Miércoles">
+Miércoles
+</option>
+
+
+<option value="Jueves">
+Jueves
+</option>
+
+
+<option value="Viernes">
+Viernes
+</option>
+
+
+<option value="Sábado">
+Sábado
+</option>
+
+
+<option value="Domingo">
+Domingo
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+
+
+
 <div className="botones">
+
 
 
 <button
 
 className="btn-guardar"
+
+type="submit"
 
 >
 
@@ -152,6 +228,8 @@ className="btn-guardar"
 
 
 </button>
+
+
 
 
 
@@ -168,6 +246,7 @@ onClick={()=>navigate("/tiendas")}
 
 Cancelar
 
+
 </button>
 
 
@@ -177,10 +256,13 @@ Cancelar
 
 
 
+
 </form>
 
 
+
 </div>
+
 
 
 </div>

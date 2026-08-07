@@ -5,406 +5,437 @@ import api from "../api/axios";
 import "../styles/tiendas.css";
 
 
-function Tiendas() {
+function Tiendas(){
 
+const navigate = useNavigate();
 
-  const navigate = useNavigate();
 
+const [tiendas,setTiendas] = useState([]);
 
-  const [tiendas, setTiendas] = useState([]);
+const [busqueda,setBusqueda] = useState("");
 
-  const [busqueda, setBusqueda] = useState("");
+const [diaFiltro,setDiaFiltro] = useState("Todos");
 
 
 
 
+// =========================
+// CARGAR TIENDAS
+// =========================
 
 
+const cargarTiendas = async()=>{
 
-  // =========================
-  // CARGAR TIENDAS
-  // =========================
 
-  const cargarTiendas = async () => {
+try{
 
 
-    try {
+const respuesta = await api.get("/clientes");
 
 
-      const respuesta = await api.get("/clientes");
+setTiendas(respuesta.data);
 
 
-      setTiendas(respuesta.data);
 
+}catch(error){
 
 
-    } catch(error){
+console.error(
+"Error cargando tiendas:",
+error
+);
 
 
-      console.error(
-        "Error cargando tiendas:",
-        error
-      );
+}
 
 
-    }
+};
 
 
-  };
 
 
+useEffect(()=>{
 
+cargarTiendas();
 
+},[]);
 
 
 
-  useEffect(()=>{
 
 
-    cargarTiendas();
+// =========================
+// ELIMINAR TIENDA
+// =========================
 
 
-  },[]);
+const eliminarTienda = async(id)=>{
 
 
+const confirmar = window.confirm(
+"¿Desea eliminar esta tienda?"
+);
 
 
 
+if(!confirmar)
+return;
 
 
 
 
-  // =========================
-  // ELIMINAR TIENDA
-  // =========================
+try{
 
 
-  const eliminarTienda = async(id)=>{
+await api.delete(
+`/clientes/${id}`
+);
 
 
-    const confirmar = window.confirm(
-      "¿Desea eliminar esta tienda?"
-    );
 
+alert(
+"Tienda eliminada correctamente"
+);
 
 
-    if(!confirmar)
-      return;
 
+cargarTiendas();
 
 
 
+}catch(error){
 
-    try{
 
+console.error(error);
 
-      await api.delete(
-        `/clientes/${id}`
-      );
 
+alert(
+"No fue posible eliminar la tienda"
+);
 
 
-      alert(
-        "Tienda eliminada correctamente"
-      );
+}
 
 
-      cargarTiendas();
+};
 
 
 
-    }catch(error){
 
 
-      console.error(error);
+// =========================
+// FILTROS
+// =========================
 
 
-      alert(
-        "No fue posible eliminar la tienda"
-      );
+const tiendasFiltradas = tiendas.filter((tienda)=>{
 
 
-    }
+const coincideNombre =
 
+tienda.nombre
 
+.toLowerCase()
 
-  };
+.includes(
 
+busqueda.toLowerCase()
 
+);
 
 
 
+const coincideDia =
 
+diaFiltro === "Todos"
 
+?
 
+true
 
-  const tiendasFiltradas = tiendas.filter((tienda)=>
+:
 
-    tienda.nombre
-      .toLowerCase()
-      .includes(
-        busqueda.toLowerCase()
-      )
+tienda.dia?.toLowerCase() === diaFiltro.toLowerCase();
 
-  );
 
 
+return coincideNombre && coincideDia;
 
 
 
+});
 
 
 
 
-  return(
 
 
 
-    <div className="tiendas-container">
+return(
 
 
+<div className="tiendas-container">
 
-      <div className="tiendas-card">
 
+<div className="tiendas-card">
 
 
 
+<h1>
+🏪 Gestión de Tiendas
+</h1>
 
-        <h1>
-          🏪 Gestión de Tiendas
-        </h1>
 
 
 
 
+<div className="buscar-contenedores">
 
 
 
+<div className="buscar-tienda">
 
-        <div className="buscar-tienda">
 
+<input
 
-          <input
+type="text"
 
-            type="text"
+placeholder="🔎 Buscar tienda..."
 
-            placeholder="🔎 Buscar tienda..."
+value={busqueda}
 
-            value={busqueda}
+onChange={(e)=>
 
-            onChange={(e)=>
-              setBusqueda(e.target.value)
-            }
+setBusqueda(e.target.value)
 
-          />
+}
 
+/>
 
-        </div>
 
+</div>
 
 
 
 
 
+<div className="filtro-dia">
 
 
+<select
 
-        {
+value={diaFiltro}
 
-          tiendasFiltradas.length === 0 ? (
+onChange={(e)=>
 
+setDiaFiltro(e.target.value)
 
-            <div className="sin-tiendas">
+}
 
+>
 
-              No hay tiendas registradas.
 
+<option value="Todos">
+Todas las tiendas
+</option>
 
-            </div>
 
+<option value="Lunes">
+Lunes
+</option>
 
 
-          ) : (
+<option value="Martes">
+Martes
+</option>
 
 
+<option value="Miércoles">
+Miércoles
+</option>
 
-            tiendasFiltradas.map((tienda)=>(
 
+<option value="Jueves">
+Jueves
+</option>
 
 
-              <div
+<option value="Viernes">
+Viernes
+</option>
 
-                className="tienda-item"
 
-                key={tienda.id}
+<option value="Sábado">
+Sábado
+</option>
 
-              >
 
+<option value="Domingo">
+Domingo
+</option>
 
 
 
+</select>
 
-                <div className="info-tienda">
 
+</div>
 
-                  <h3>
 
-                    🏪 {tienda.nombre}
+</div>
 
-                  </h3>
 
 
-                </div>
 
 
 
+{
 
+tiendasFiltradas.length === 0 ? (
 
 
+<div className="sin-tiendas">
 
+No hay tiendas registradas.
 
-                <div className="acciones-tienda">
+</div>
 
 
+) : (
 
-                  <button
 
-                    className="editar"
 
-                    onClick={()=>
-                      navigate(
-                        `/editar-tienda/${tienda.id}`
-                      )
-                    }
+tiendasFiltradas.map((tienda)=>(
 
-                  >
 
-                    ✏ Editar
 
+<div
 
-                  </button>
+className="tienda-item"
 
+key={tienda.id}
 
+>
 
 
 
+<div className="info-tienda">
 
 
-                  <button
+<h3>
 
-                    className="eliminar"
+🏪 {tienda.nombre}
 
-                    onClick={()=>
-                      eliminarTienda(
-                        tienda.id
-                      )
-                    }
+</h3>
 
-                  >
 
-                    🗑 Eliminar
+</div>
 
 
-                  </button>
 
 
 
+<div className="acciones-tienda">
 
-                </div>
 
 
+<button
 
+className="editar"
 
+onClick={()=>navigate(
+`/editar-tienda/${tienda.id}`
+)}
 
+>
 
+✏ Editar
 
-              </div>
+</button>
 
 
 
-            ))
 
 
-          )
+<button
 
+className="eliminar"
 
-        }
+onClick={()=>eliminarTienda(tienda.id)}
 
+>
 
+🗑 Eliminar
 
+</button>
 
 
 
+</div>
 
 
 
-        <div className="botones-inferiores">
 
+</div>
 
 
+))
 
 
-          <button
+)
 
-            className="btn-nueva"
 
-            onClick={()=>
-              navigate("/nueva-tienda")
-            }
+}
 
-          >
 
-            ➕ Nueva Tienda
 
 
-          </button>
 
 
+<div className="botones-inferiores">
 
 
+<button
 
+className="btn-nueva"
 
+onClick={()=>navigate("/nueva-tienda")}
 
+>
 
-          <button
+➕ Nueva Tienda
 
-            className="btn-volver"
+</button>
 
-            onClick={()=>
-              navigate("/dashboard")
-            }
 
-          >
 
-            ⬅ Volver
 
+<button
 
-          </button>
+className="btn-volver"
 
+onClick={()=>navigate("/dashboard")}
 
+>
 
+⬅ Volver
 
+</button>
 
 
-        </div>
 
+</div>
 
 
 
+</div>
 
 
+</div>
 
-      </div>
 
 
-
-
-
-    </div>
-
-
-
-  );
+);
 
 
 }

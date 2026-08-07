@@ -17,7 +17,6 @@ function Usuarios() {
 
 
 
-
     useEffect(() => {
 
         cargarUsuarios();
@@ -30,6 +29,10 @@ function Usuarios() {
 
 
 
+    // ===============================
+    // CARGAR USUARIOS
+    // ===============================
+
     const cargarUsuarios = async () => {
 
 
@@ -40,13 +43,14 @@ function Usuarios() {
                 await api.get("/usuarios");
 
 
+
             setUsuarios(
                 respuesta.data
             );
 
 
 
-        } catch (error) {
+        } catch(error){
 
 
             console.error(
@@ -72,7 +76,6 @@ function Usuarios() {
     // REGISTRAR ENTREGA
     // ===============================
 
-
     const registrarEntrega = async (id) => {
 
 
@@ -82,7 +85,7 @@ function Usuarios() {
 
 
 
-        if (!valor)
+        if(!valor)
             return;
 
 
@@ -90,84 +93,28 @@ function Usuarios() {
 
 
 
-
-        try {
-
-
-            await api.post(
-
-                `/usuarios/${id}/entrega`,
-
-                {
-                    valor: Number(valor)
-                }
-
-            );
+        const valorNumero = Number(valor);
 
 
 
+
+
+
+        if(isNaN(valorNumero) || valorNumero <= 0){
 
 
             alert(
-                "Entrega registrada correctamente"
+                "Ingrese un valor válido"
             );
 
 
-
-            cargarUsuarios();
-
-
-
-
-
-
-        } catch (error) {
-
-
-            console.error(error);
-
-
-
-            alert(
-                "No se pudo registrar la entrega"
-            );
-
+            return;
 
 
         }
 
 
 
-    };
-
-
-
-
-
-
-
-
-
-    // ===============================
-    // ELIMINAR USUARIO
-    // ===============================
-
-
-    const eliminarUsuario = async (id) => {
-
-
-        const confirmar =
-            window.confirm(
-                "¿Desea eliminar este usuario?"
-            );
-
-
-
-        if (!confirmar)
-            return;
-
-
-
 
 
 
@@ -175,11 +122,42 @@ function Usuarios() {
         try {
 
 
-            await api.delete(
 
-                `/usuarios/${id}`
+            const respuesta = await api.post(
+
+
+                `/usuarios/${id}/entrega`,
+
+
+                {
+
+                    valor: valorNumero
+
+                }
+
 
             );
+
+
+
+
+
+
+
+            alert(
+
+
+                respuesta.data.mensaje
+
+                ||
+
+                "Entrega registrada correctamente"
+
+
+            );
+
+
+
 
 
 
@@ -190,14 +168,33 @@ function Usuarios() {
 
 
 
-        } catch (error) {
+
+        }catch(error){
+
 
 
             console.error(
 
-                "Error eliminando usuario:",
+                "Error registrando entrega:",
 
-                error
+                error.response?.data || error
+
+            );
+
+
+
+
+
+
+            alert(
+
+
+                error.response?.data?.mensaje
+
+                ||
+
+                "No se pudo registrar la entrega"
+
 
             );
 
@@ -231,6 +228,7 @@ function Usuarios() {
 
 
 
+
             <div className="usuarios-header">
 
 
@@ -254,8 +252,6 @@ function Usuarios() {
 
 
                 </div>
-
-
 
 
 
@@ -304,6 +300,7 @@ function Usuarios() {
 
 
 
+
             </div>
 
 
@@ -321,7 +318,9 @@ function Usuarios() {
 
 
 
+
                 <table>
+
 
 
 
@@ -384,13 +383,10 @@ function Usuarios() {
 
 
 
+                    {
 
 
-                        {
-
-                            usuarios.length === 0
-
-                            ?
+                        usuarios.length === 0 ? (
 
 
 
@@ -412,17 +408,18 @@ function Usuarios() {
 
 
 
-
-                            :
-
+                        )
 
 
+
+                        :
+
+
+
+                        (
 
 
                             usuarios.map((usuario)=>(
-
-
-
 
 
 
@@ -444,6 +441,7 @@ function Usuarios() {
 
 
                                     <td>
+
 
 
                                         <span
@@ -503,13 +501,16 @@ function Usuarios() {
 
                                         {
 
+
                                             Number(
 
                                                 usuario.total_ventas || 0
 
                                             )
 
-                                            .toLocaleString("es-CO")
+                                            .toLocaleString(
+                                                "es-CO"
+                                            )
 
 
                                         }
@@ -533,13 +534,16 @@ function Usuarios() {
 
                                         {
 
+
                                             Number(
 
                                                 usuario.dinero_entregado || 0
 
                                             )
 
-                                            .toLocaleString("es-CO")
+                                            .toLocaleString(
+                                                "es-CO"
+                                            )
 
 
                                         }
@@ -566,13 +570,16 @@ function Usuarios() {
 
                                             {
 
+
                                                 Number(
 
                                                     usuario.saldo_pendiente || 0
 
                                                 )
 
-                                                .toLocaleString("es-CO")
+                                                .toLocaleString(
+                                                    "es-CO"
+                                                )
 
 
                                             }
@@ -594,6 +601,7 @@ function Usuarios() {
 
 
                                     <td>
+
 
 
 
@@ -622,14 +630,19 @@ function Usuarios() {
 
 
 
+
+
                                         <button
 
                                             className="btn-editar"
 
                                             onClick={() =>
                                                 navigate(
+
                                                     `/editar-usuario/${usuario.id}`
+
                                                 )
+
                                             }
 
                                         >
@@ -645,29 +658,8 @@ function Usuarios() {
 
 
 
-
-
-                                        <button
-
-                                            className="btn-eliminar"
-
-                                            onClick={() =>
-                                                eliminarUsuario(usuario.id)
-                                            }
-
-                                        >
-
-                                            🗑 Eliminar
-
-
-                                        </button>
-
-
-
-
-
-
                                     </td>
+
 
 
 
@@ -677,18 +669,23 @@ function Usuarios() {
 
 
 
-
-
                             ))
 
 
-                        }
+                        )
+
+
+                    }
+
+
 
 
 
 
 
                     </tbody>
+
+
 
 
 

@@ -7,22 +7,20 @@ import "../styles/nuevatienda.css";
 
 function EditarTienda(){
 
+const navigate = useNavigate();
 
-const navigate=useNavigate();
-
-const {id}=useParams();
+const {id} = useParams();
 
 
-const [nombre,setNombre]=useState("");
+const [nombre,setNombre] = useState("");
 
+const [dia,setDia] = useState("");
 
 
 
 useEffect(()=>{
 
-
 cargarTienda();
-
 
 },[]);
 
@@ -30,24 +28,32 @@ cargarTienda();
 
 
 
-const cargarTienda=async()=>{
+const cargarTienda = async()=>{
 
 
 try{
 
 
-const respuesta=
-await api.get(`/clientes/${id}`);
+const respuesta = await api.get(`/clientes/${id}`);
 
 
 
-setNombre(respuesta.data.nombre);
+setNombre(
+    respuesta.data.nombre
+);
+
+
+setDia(
+    respuesta.data.dia || ""
+);
 
 
 
 }catch(error){
 
+
 console.log(error);
+
 
 }
 
@@ -59,10 +65,12 @@ console.log(error);
 
 
 
-const actualizar=async(e)=>{
+
+const actualizar = async(e)=>{
 
 
 e.preventDefault();
+
 
 
 try{
@@ -70,7 +78,11 @@ try{
 
 await api.put(`/clientes/${id}`,{
 
-nombre
+
+nombre,
+
+dia
+
 
 });
 
@@ -84,6 +96,9 @@ navigate("/tiendas");
 
 
 }catch(error){
+
+
+console.log(error);
 
 
 alert("Error actualizando");
@@ -108,27 +123,19 @@ return(
 <div className="tienda-card">
 
 
-
-<div className="factura-header">
-
-
-<div className="titulo-factura">
-
 <h1>
+
 ✏ Editar Tienda
+
 </h1>
 
 
-<p>
-Actualizar información
-</p>
-
-
-</div>
 
 
 
 <button
+
+type="button"
 
 className="btn-dashboard-factura"
 
@@ -138,11 +145,8 @@ onClick={()=>navigate("/dashboard")}
 
 🏠 Volver al Dashboard
 
-
 </button>
 
-
-</div>
 
 
 
@@ -156,8 +160,11 @@ onClick={()=>navigate("/dashboard")}
 
 
 <label>
-Nombre tienda
+
+Nombre de la tienda
+
 </label>
+
 
 
 <input
@@ -171,7 +178,90 @@ required
 />
 
 
+
 </div>
+
+
+
+
+
+
+
+
+<div className="form-grupo">
+
+
+<label>
+
+Día de visita
+
+</label>
+
+
+
+<select
+
+value={dia}
+
+onChange={(e)=>setDia(e.target.value)}
+
+required
+
+>
+
+
+<option value="">
+
+Seleccione día
+
+</option>
+
+
+<option value="Lunes">
+Lunes
+</option>
+
+
+<option value="Martes">
+Martes
+</option>
+
+
+<option value="Miércoles">
+Miércoles
+</option>
+
+
+<option value="Jueves">
+Jueves
+</option>
+
+
+<option value="Viernes">
+Viernes
+</option>
+
+
+<option value="Sábado">
+Sábado
+</option>
+
+
+<option value="Domingo">
+Domingo
+</option>
+
+
+</select>
+
+
+
+</div>
+
+
+
+
+
 
 
 
@@ -183,12 +273,18 @@ required
 
 className="btn-guardar"
 
+type="submit"
+
 >
 
 💾 Guardar Cambios
 
 
 </button>
+
+
+
+
 
 
 
@@ -212,7 +308,9 @@ Cancelar
 </div>
 
 
+
 </form>
+
 
 
 </div>

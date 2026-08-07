@@ -40,6 +40,7 @@ year:"numeric"
 const [datos,setDatos]=useState({
 
 totalVentas:0,
+totalEntregado:0,
 totalClientes:0,
 totalTrabajadores:0,
 totalFacturas:0,
@@ -204,25 +205,8 @@ menu
 <div className="cerrar-menu">
 
 
-<button
-
-onClick={()=>setMenu(false)}
-
->
-
-✖
-
-</button>
-
 
 </div>
-
-
-
-
-
-
-
 
 
 <div className="logo">
@@ -410,7 +394,6 @@ Bienvenido{" "}
 
 
 
-
 <h1>
 
 $
@@ -423,10 +406,7 @@ Number(datos.totalVentas)
 
 }
 
-
 </h1>
-
-
 
 
 
@@ -435,6 +415,31 @@ Number(datos.totalVentas)
 Ventas registradas durante el día.
 
 </p>
+
+
+
+
+<h3>
+
+💵 Total entregado trabajadores
+
+</h3>
+
+
+
+<h1>
+
+$
+
+{
+
+Number(datos.totalEntregado)
+
+.toLocaleString("es-CO")
+
+}
+
+</h1>
 
 
 
